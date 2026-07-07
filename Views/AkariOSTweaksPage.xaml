@@ -1,0 +1,38 @@
+<Page
+    x:Class="AkariOSCompanion.Views.AkariOSTweaksPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:vm="clr-namespace:AkariOSCompanion.ViewModels"
+    Title="Akari OS Tweaks"
+    d:DataContext="{d:DesignInstance Type=vm:AkariOSTweaksViewModel}"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    mc:Ignorable="d"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <ItemsControl ItemsSource="{Binding Tweaks}" Margin="36,28,40,80">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="2" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border Style="{StaticResource TweakRow}" Margin="0,0,16,16">
+                        <Grid>
+                            <StackPanel VerticalAlignment="Center" Margin="0,0,12,0">
+                                <TextBlock Text="{Binding Title}" FontWeight="SemiBold" FontSize="14"
+                                           Foreground="{StaticResource AkariText}" TextTrimming="CharacterEllipsis" />
+                                <TextBlock Text="{Binding Description}" Style="{StaticResource Caption}"
+                                           FontSize="12.5" Margin="0,3,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch HorizontalAlignment="Right" VerticalAlignment="Center"
+                                             IsChecked="{Binding IsOn, Mode=TwoWay}" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ScrollViewer>
+</Page>

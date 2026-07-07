@@ -1,0 +1,20 @@
+﻿AkariOSCompanion
+2.0.0.0
+
+winexe
+C#
+.cs
+C:\Users\isleap\Documents\GitHub\Akari OS Companion\obj\Debug\net8.0-windows\
+AkariOSCompanion
+none
+false
+TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
+C:\Users\isleap\Documents\GitHub\Akari OS Companion\App.xaml
+101391808451
+
+26811973407
+2001990986801
+MainWindow.xaml;Themes\Colors.xaml;Themes\Controls.xaml;Views\AkariOSTweaksPage.xaml;Views\Controls.xaml;Views\DebloatPage.xaml;Views\DownloadsPage.xaml;Views\GamingTweaksPage.xaml;Views\HomePage.xaml;Views\MiscPage.xaml;
+
+True
+

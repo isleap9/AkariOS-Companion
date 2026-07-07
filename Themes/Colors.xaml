@@ -1,0 +1,42 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ===== Akari OS Companion palette (black / crimson) ===== -->
+
+    <!-- Surfaces -->
+    <SolidColorBrush x:Key="AkariBg"          Color="#FF060304" />
+    <SolidColorBrush x:Key="AkariContentBg"   Color="#FF070304" />
+    <SolidColorBrush x:Key="AkariCard"        Color="#8C160709" />
+    <SolidColorBrush x:Key="AkariCardHover"   Color="#B3220A0D" />
+    <SolidColorBrush x:Key="AkariInput"       Color="#99160709" />
+
+    <!-- Accent -->
+    <SolidColorBrush x:Key="AkariCrimson"      Color="#FFD92D39" />
+    <SolidColorBrush x:Key="AkariCrimsonLight" Color="#FFEC5862" />
+    <Color           x:Key="AkariCrimsonColor">#FFD92D39</Color>
+
+    <!-- Text -->
+    <SolidColorBrush x:Key="AkariText"     Color="#FFF0EAEB" />
+    <SolidColorBrush x:Key="AkariTextDim"  Color="#FFC8BCBE" />
+    <SolidColorBrush x:Key="AkariMuted"    Color="#FF8A7E80" />
+    <SolidColorBrush x:Key="AkariFaint"    Color="#FF6A5B5D" />
+
+    <!-- Lines / borders -->
+    <SolidColorBrush x:Key="AkariBorder"     Color="#26FF3C46" />
+    <SolidColorBrush x:Key="AkariBorderSoft" Color="#14FFFFFF" />
+
+    <!-- Status -->
+    <SolidColorBrush x:Key="AkariFree"   Color="#FF5FD47A" />
+    <SolidColorBrush x:Key="AkariOnline" Color="#FF5FD47A" />
+
+    <!-- Download category accents -->
+    <SolidColorBrush x:Key="CatBrowsers"  Color="#FFEC5862" />
+    <SolidColorBrush x:Key="CatComms"     Color="#FFE0A23A" />
+    <SolidColorBrush x:Key="CatDev"       Color="#FF6AA8EC" />
+    <SolidColorBrush x:Key="CatGaming"    Color="#FFD6589E" />
+    <SolidColorBrush x:Key="CatUtilities" Color="#FF4FC9A8" />
+
+    <FontFamily x:Key="AkariDisplay">Segoe UI Variable Display, Segoe UI</FontFamily>
+
+</ResourceDictionary>

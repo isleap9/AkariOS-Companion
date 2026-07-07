@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>AkariOSCompanion</RootNamespace>
+    <AssemblyName>AkariOSCompanion</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\AkariLogo.ico</ApplicationIcon>
+    <Version>2.0.0</Version>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- WPF-UI (Fluent / WinUI controls) — https://wpfui.lepo.co -->
+    <PackageReference Include="WPF-UI" Version="3.0.5" />
+    <!-- MVVM helpers ([ObservableProperty], [RelayCommand]) -->
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\AkariLogo.png" />
+    <Resource Include="Assets\HomeBackdrop.png" />
+    <Resource Include="Assets\AkariLogo.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Debloat/Tweaks PowerShell scripts — embedded so ToolService can
+         extract and run them at runtime via GetManifestResourceStream -->
+    <EmbeddedResource Include="Scripts\*.ps1" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,7 @@
+C:\Users\isleap\Documents\GitHub\Akari OS Companion\bin\Release\net8.0-windows\publish\AkariOSCompanion.exe
+C:\Users\isleap\Documents\GitHub\Akari OS Companion\bin\Release\net8.0-windows\publish\AkariOSCompanion.dll
+C:\Users\isleap\Documents\GitHub\Akari OS Companion\bin\Release\net8.0-windows\publish\AkariOSCompanion.deps.json
+C:\Users\isleap\Documents\GitHub\Akari OS Companion\bin\Release\net8.0-windows\publish\AkariOSCompanion.runtimeconfig.json
+C:\Users\isleap\Documents\GitHub\Akari OS Companion\bin\Release\net8.0-windows\publish\AkariOSCompanion.pdb
+C:\Users\isleap\Documents\GitHub\Akari OS Companion\bin\Release\net8.0-windows\publish\CommunityToolkit.Mvvm.dll
+C:\Users\isleap\Documents\GitHub\Akari OS Companion\bin\Release\net8.0-windows\publish\Wpf.Ui.dll

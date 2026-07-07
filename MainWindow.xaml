@@ -1,0 +1,306 @@
+<ui:FluentWindow
+    x:Class="AkariOSCompanion.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="Akari OS Companion"
+    Width="1180" Height="760"
+    MinWidth="940" MinHeight="600"
+    WindowStartupLocation="CenterScreen"
+    ExtendsContentIntoTitleBar="True"
+    WindowBackdropType="None"
+    Background="#FF060304">
+
+    <ui:FluentWindow.Resources>
+        <!-- Nav RadioButton: text-only, crimson left bar on IsChecked -->
+        <Style x:Key="AkariNavBtn" TargetType="RadioButton">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{StaticResource AkariMuted}" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="bg" Background="Transparent" Height="38">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="3" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Rectangle x:Name="accent" Grid.Column="0" Fill="Transparent" />
+                                <ContentPresenter Grid.Column="1" Margin="15,0,12,0" VerticalAlignment="Center" />
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bg" Property="Background" Value="#14FFFFFF" />
+                                <Setter Property="Foreground" Value="{StaticResource AkariTextDim}" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="bg" Property="Background" Value="#18D92D39" />
+                                <Setter TargetName="accent" Property="Fill" Value="{StaticResource AkariCrimson}" />
+                                <Setter Property="Foreground" Value="{StaticResource AkariText}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Nav footer button (GitHub) -->
+        <Style x:Key="AkariNavFooterBtn" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{StaticResource AkariMuted}" />
+            <Setter Property="FontSize" Value="12.5" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bg" Background="Transparent" Padding="18,10">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bg" Property="Background" Value="#14FFFFFF" />
+                                <Setter Property="Foreground" Value="{StaticResource AkariTextDim}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </ui:FluentWindow.Resources>
+
+    <Grid>
+
+        <!-- ═══ Full-window animated backdrop (behind everything) ═══ -->
+        <Grid ClipToBounds="True" IsHitTestVisible="False">
+
+            <Image Source="pack://application:,,,/Assets/HomeBackdrop.png"
+                   Stretch="UniformToFill" RenderTransformOrigin="0.5,0.4">
+                <Image.RenderTransform>
+                    <ScaleTransform x:Name="bgScale" ScaleX="1" ScaleY="1" />
+                </Image.RenderTransform>
+                <Image.Triggers>
+                    <EventTrigger RoutedEvent="Image.Loaded">
+                        <BeginStoryboard>
+                            <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                                <DoubleAnimation Storyboard.TargetName="bgScale"
+                                                 Storyboard.TargetProperty="ScaleX"
+                                                 From="1" To="1.07" Duration="0:0:8" />
+                                <DoubleAnimation Storyboard.TargetName="bgScale"
+                                                 Storyboard.TargetProperty="ScaleY"
+                                                 From="1" To="1.07" Duration="0:0:8" />
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                 From="0.35" To="0.55" Duration="0:0:8" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Image.Triggers>
+            </Image>
+
+            <!-- Pulsing crimson radial glow -->
+            <Ellipse Width="900" Height="700"
+                     HorizontalAlignment="Right" VerticalAlignment="Top"
+                     Margin="0,-200,-200,0">
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#60B01A26" Offset="0" />
+                        <GradientStop Color="#00060304" Offset="0.7" />
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+                <Ellipse.Triggers>
+                    <EventTrigger RoutedEvent="Ellipse.Loaded">
+                        <BeginStoryboard>
+                            <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                 From="0.5" To="1.0" Duration="0:0:5" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+
+            <!-- Left-side dark scrim so nav pane stays readable -->
+            <Rectangle IsHitTestVisible="False">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#F0060304" Offset="0" />
+                        <GradientStop Color="#C0060304" Offset="0.18" />
+                        <GradientStop Color="#00060304" Offset="0.55" />
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+        </Grid>
+
+        <!-- ═══ Shell: two columns (nav pane | content) ═══ -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="160" />   <!-- nav pane -->
+                <ColumnDefinition Width="*"   />   <!-- content  -->
+            </Grid.ColumnDefinitions>
+
+            <!-- ─── LEFT: nav pane ─── -->
+            <Grid Grid.Column="0" Background="#88030101">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />   <!-- logo + app name -->
+                    <RowDefinition Height="*"    />   <!-- nav buttons     -->
+                    <RowDefinition Height="Auto" />   <!-- GitHub footer   -->
+                </Grid.RowDefinitions>
+
+                <!-- Logo + name: circular avatar left, text right -->
+                <Grid Grid.Row="0" Margin="14,40,14,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Outer border: glow effect only, no clip -->
+                    <Border Grid.Column="0" Width="36" Height="36"
+                            CornerRadius="18" VerticalAlignment="Center">
+                        <Border.Effect>
+                            <DropShadowEffect Color="#D92D39" BlurRadius="14"
+                                              ShadowDepth="0" Opacity="0.7" />
+                        </Border.Effect>
+                        <!-- Inner border: clips the image into a circle -->
+                        <Border CornerRadius="18" ClipToBounds="True">
+                            <Image Source="pack://application:,,,/Assets/AkariLogo.png"
+                                   Stretch="UniformToFill" />
+                        </Border>
+                    </Border>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10,0,0,0">
+                        <TextBlock Text="Akari OS Companion"
+                                   FontFamily="{StaticResource AkariDisplay}"
+                                   FontSize="11" FontWeight="Bold"
+                                   Foreground="{StaticResource AkariText}"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Text="System management utility"
+                                   FontSize="9.5" Foreground="{StaticResource AkariMuted}"
+                                   TextWrapping="Wrap" Margin="0,2,0,0" />
+                    </StackPanel>
+                </Grid>
+
+                <!-- Nav RadioButtons (GroupName enforces single-select) -->
+                <StackPanel Grid.Row="1">
+                    <RadioButton x:Name="NavHome"
+                                 Content="Home"
+                                 GroupName="Nav"
+                                 Style="{StaticResource AkariNavBtn}"
+                                 IsChecked="True"
+                                 Click="Nav_Click" Tag="Home" />
+                    <RadioButton x:Name="NavDebloat"
+                                 Content="Debloat / Tweaks"
+                                 GroupName="Nav"
+                                 Style="{StaticResource AkariNavBtn}"
+                                 Click="Nav_Click" Tag="Debloat" />
+                    <RadioButton x:Name="NavGaming"
+                                 Content="Gaming Tweaks"
+                                 GroupName="Nav"
+                                 Style="{StaticResource AkariNavBtn}"
+                                 Click="Nav_Click" Tag="GamingTweaks" />
+                    <RadioButton x:Name="NavAkariOS"
+                                 Content="Akari OS Tweaks"
+                                 GroupName="Nav"
+                                 Style="{StaticResource AkariNavBtn}"
+                                 Click="Nav_Click" Tag="AkariOSTweaks" />
+                    <RadioButton x:Name="NavDownloads"
+                                 Content="Downloads"
+                                 GroupName="Nav"
+                                 Style="{StaticResource AkariNavBtn}"
+                                 Click="Nav_Click" Tag="Downloads" />
+                    <RadioButton x:Name="NavMisc"
+                                 Content="Misc"
+                                 GroupName="Nav"
+                                 Style="{StaticResource AkariNavBtn}"
+                                 Click="Nav_Click" Tag="Misc" />
+                </StackPanel>
+
+                <!-- Footer -->
+                <StackPanel Grid.Row="2" Margin="0,0,0,16">
+                    <Rectangle Height="1" Fill="#18FFFFFF" Margin="16,0,16,8" />
+                    <Button Content="⟨/⟩  GitHub"
+                            Click="GitHub_Click"
+                            Style="{StaticResource AkariNavFooterBtn}" />
+                </StackPanel>
+            </Grid>
+
+            <!-- ─── RIGHT: title-bar strip + page Frame ─── -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="34" />   <!-- title-bar drag strip -->
+                    <RowDefinition Height="*"   />   <!-- page content        -->
+                    <RowDefinition Height="Auto" />  <!-- status bar          -->
+                </Grid.RowDefinitions>
+
+                <!-- Title-bar strip: WPF-UI chrome handles min/max/close -->
+                <ui:TitleBar Grid.Row="0"
+                             Background="Transparent"
+                             Foreground="{StaticResource AkariTextDim}" />
+
+                <!-- ADMIN pill overlaid on the title-bar row, right of content / left of chrome -->
+                <Border Grid.Row="0"
+                        HorizontalAlignment="Right" VerticalAlignment="Center"
+                        Margin="0,0,148,0"
+                        BorderBrush="#22FFFFFF" BorderThickness="1"
+                        CornerRadius="8" Background="#08FFFFFF"
+                        Padding="10,3" IsHitTestVisible="False">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Width="6" Height="6" VerticalAlignment="Center"
+                                 Fill="{StaticResource AkariOnline}">
+                            <Ellipse.Effect>
+                                <DropShadowEffect Color="#5FD47A" BlurRadius="6"
+                                                  ShadowDepth="0" Opacity="0.9" />
+                            </Ellipse.Effect>
+                        </Ellipse>
+                        <TextBlock Text="ADMIN" Margin="6,0,0,0"
+                                   FontSize="10"
+                                   Foreground="{StaticResource AkariTextDim}" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Status bar -->
+                <Border Grid.Row="2"
+                        Background="#CC030101"
+                        BorderBrush="#14FFFFFF"
+                        BorderThickness="0,1,0,0"
+                        Padding="16,6">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,3">
+                            <TextBlock x:Name="TxtProgressStatus"
+                                       Foreground="{StaticResource AkariMuted}"
+                                       FontSize="11" VerticalAlignment="Center"
+                                       Margin="0,0,8,0" Visibility="Collapsed"/>
+                            <ProgressBar x:Name="LogProgress"
+                                         Height="4" Width="180" Minimum="0" Maximum="100"
+                                         Foreground="{StaticResource AkariCrimson}"
+                                         Background="#26FF3C46" BorderThickness="0"
+                                         Visibility="Collapsed"/>
+                        </StackPanel>
+                        <TextBox x:Name="TxtLog"
+                                 Grid.Row="1"
+                                 IsReadOnly="True" TextWrapping="Wrap"
+                                 Background="Transparent"
+                                 Foreground="{StaticResource AkariMuted}"
+                                 BorderThickness="0" FontSize="11"
+                                 FontFamily="Consolas" MaxHeight="72"
+                                 VerticalScrollBarVisibility="Auto"/>
+                    </Grid>
+                </Border>
+
+                <!-- Page host -->
+                <Frame x:Name="PageFrame"
+                       Grid.Row="1"
+                       Background="Transparent"
+                       NavigationUIVisibility="Hidden" />
+            </Grid>
+        </Grid>
+    </Grid>
+</ui:FluentWindow>
