@@ -49,7 +49,7 @@ public partial class MainWindow : FluentWindow
     {
         Process.Start(new ProcessStartInfo
         {
-            FileName = "https://github.com/isleap9/Akari-Tool",
+            FileName = "https://github.com/isleap9/AkariOS-Companion",
             UseShellExecute = true
         });
     }

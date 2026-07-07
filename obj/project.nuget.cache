@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "bQURH0zlWJQ=",
+  "dgSpecHash": "3FVz0mYvXAk=",
   "success": true,
-  "projectFilePath": "C:\\Users\\isleap\\Documents\\GitHub\\Akari OS Companion\\AkariOSCompanion.csproj",
+  "projectFilePath": "C:\\Users\\isleap\\Documents\\GitHub\\AkariOS-Companion\\AkariOSCompanion.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\isleap\\.nuget\\packages\\communitytoolkit.mvvm\\8.2.2\\communitytoolkit.mvvm.8.2.2.nupkg.sha512",
     "C:\\Users\\isleap\\.nuget\\packages\\wpf-ui\\3.0.5\\wpf-ui.3.0.5.nupkg.sha512",
