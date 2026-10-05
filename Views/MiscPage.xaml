@@ -30,7 +30,7 @@
                                                    FontSize="12.5" Margin="0,3,0,0" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                                        <ui:Button Content="Add" Appearance="Danger" Width="84" Margin="0,0,9,0"
+                                        <ui:Button Content="Add" Appearance="Primary" Width="84" Margin="0,0,9,0"
                                                    Command="{Binding DataContext.AddCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                                    CommandParameter="{Binding Key}" />
                                         <ui:Button Content="Remove" Appearance="Secondary" Width="84"

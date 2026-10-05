@@ -1,0 +1,11 @@
+<Page
+    x:Class="AkariOSCompanion.Views.AkariOSPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Akari OS"
+    Background="Transparent">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel x:Name="RootPanel" Margin="36,24,36,80" />
+    </ScrollViewer>
+</Page>

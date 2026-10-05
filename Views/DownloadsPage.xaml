@@ -21,7 +21,7 @@
         <!-- Action bar -->
         <Grid Grid.Row="0">
             <StackPanel Orientation="Horizontal">
-                <ui:Button Appearance="Danger" Icon="{ui:SymbolIcon ArrowDownload24}"
+                <ui:Button Appearance="Primary" Icon="{ui:SymbolIcon ArrowDownload24}"
                            Content="Install Selected"
                            Command="{Binding InstallSelectedCommand}"
                            IsEnabled="{Binding SelectedCount, Converter={StaticResource CountToBool}}" />
@@ -29,9 +29,9 @@
                            Command="{Binding ClearSelectionCommand}" />
             </StackPanel>
             <Border HorizontalAlignment="Right" VerticalAlignment="Center"
-                    Background="#24D92D39" BorderBrush="{StaticResource AkariBorder}"
+                    Background="#24323434" BorderBrush="{StaticResource AkariBorder}"
                     BorderThickness="1" CornerRadius="8" Padding="15,5">
-                <TextBlock Foreground="{StaticResource AkariCrimsonLight}" FontSize="12">
+                <TextBlock Foreground="{StaticResource AkariGreyLight}" FontSize="12">
                     <Run Text="{Binding SelectedCount, Mode=OneWay}" /><Run Text=" selected" />
                 </TextBlock>
             </Border>
@@ -58,7 +58,7 @@
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="ToggleButton">
-                                                <Border x:Name="chip" Background="#8C1E0C0E"
+                                                <Border x:Name="chip" Background="#8C242424"
                                                         BorderBrush="{StaticResource AkariBorder}" BorderThickness="1"
                                                         CornerRadius="8" Padding="16,7">
                                                     <ContentPresenter />
@@ -73,8 +73,8 @@
                                                                          RelativeSource="{RelativeSource AncestorType=ItemsControl}" />
                                                             </MultiBinding>
                                                         </DataTrigger.Binding>
-                                                        <Setter TargetName="chip" Property="Background" Value="{StaticResource AkariCrimson}" />
-                                                        <Setter TargetName="chip" Property="BorderBrush" Value="{StaticResource AkariCrimson}" />
+                                                        <Setter TargetName="chip" Property="Background" Value="{StaticResource AkariGrey}" />
+                                                        <Setter TargetName="chip" Property="BorderBrush" Value="{StaticResource AkariGrey}" />
                                                         <Setter Property="Foreground" Value="White" />
                                                     </DataTrigger>
                                                 </ControlTemplate.Triggers>
@@ -120,7 +120,7 @@
                                             <!-- header: monogram + name + category -->
                                             <StackPanel Grid.Row="0" Orientation="Horizontal">
                                                 <Border Width="46" Height="46" CornerRadius="12"
-                                                        Background="#22E0303A">
+                                                        Background="#22343434">
                                                     <TextBlock Text="{Binding Mono}"
                                                                FontFamily="{StaticResource AkariDisplay}"
                                                                FontSize="20" FontWeight="Bold"
@@ -158,7 +158,7 @@
 
                                             <!-- selected check badge -->
                                             <Border x:Name="badge" Grid.Row="0" Width="22" Height="22" CornerRadius="11"
-                                                    Background="{StaticResource AkariCrimson}"
+                                                    Background="{StaticResource AkariGrey}"
                                                     HorizontalAlignment="Right" VerticalAlignment="Top"
                                                     Visibility="Collapsed">
                                                 <TextBlock Text="&#xE73E;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
@@ -170,13 +170,13 @@
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
                                             <Setter TargetName="card" Property="Background" Value="{StaticResource AkariCardHover}" />
-                                            <Setter TargetName="card" Property="BorderBrush" Value="#66E0303A" />
+                                            <Setter TargetName="card" Property="BorderBrush" Value="#66343434" />
                                         </Trigger>
                                         <Trigger Property="IsChecked" Value="True">
-                                            <Setter TargetName="card" Property="BorderBrush" Value="{StaticResource AkariCrimson}" />
+                                            <Setter TargetName="card" Property="BorderBrush" Value="{StaticResource AkariGrey}" />
                                             <Setter TargetName="card" Property="Background" Value="{StaticResource AkariCardHover}" />
                                             <Setter TargetName="badge" Property="Visibility" Value="Visible" />
-                                            <Setter TargetName="action" Property="Foreground" Value="{StaticResource AkariCrimsonLight}" />
+                                            <Setter TargetName="action" Property="Foreground" Value="{StaticResource AkariGreyLight}" />
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>

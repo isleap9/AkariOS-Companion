@@ -9,10 +9,10 @@
     WindowStartupLocation="CenterScreen"
     ExtendsContentIntoTitleBar="True"
     WindowBackdropType="None"
-    Background="#FF060304">
+    Background="#FF161616">
 
     <ui:FluentWindow.Resources>
-        <!-- Nav RadioButton: text-only, crimson left bar on IsChecked -->
+        <!-- Nav RadioButton: text-only, grey left bar on IsChecked -->
         <Style x:Key="AkariNavBtn" TargetType="RadioButton">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Foreground" Value="{StaticResource AkariMuted}" />
@@ -38,8 +38,8 @@
                                 <Setter Property="Foreground" Value="{StaticResource AkariTextDim}" />
                             </Trigger>
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="bg" Property="Background" Value="#18D92D39" />
-                                <Setter TargetName="accent" Property="Fill" Value="{StaticResource AkariCrimson}" />
+                                <Setter TargetName="bg" Property="Background" Value="#18323434" />
+                                <Setter TargetName="accent" Property="Fill" Value="{StaticResource AkariGrey}" />
                                 <Setter Property="Foreground" Value="{StaticResource AkariText}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -102,14 +102,14 @@
                 </Image.Triggers>
             </Image>
 
-            <!-- Pulsing crimson radial glow -->
+            <!-- Pulsing grey radial glow -->
             <Ellipse Width="900" Height="700"
                      HorizontalAlignment="Right" VerticalAlignment="Top"
                      Margin="0,-200,-200,0">
                 <Ellipse.Fill>
                     <RadialGradientBrush>
-                        <GradientStop Color="#60B01A26" Offset="0" />
-                        <GradientStop Color="#00060304" Offset="0.7" />
+                        <GradientStop Color="#60343434" Offset="0" />
+                        <GradientStop Color="#00161616" Offset="0.7" />
                     </RadialGradientBrush>
                 </Ellipse.Fill>
                 <Ellipse.Triggers>
@@ -128,9 +128,9 @@
             <Rectangle IsHitTestVisible="False">
                 <Rectangle.Fill>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                        <GradientStop Color="#F0060304" Offset="0" />
-                        <GradientStop Color="#C0060304" Offset="0.18" />
-                        <GradientStop Color="#00060304" Offset="0.55" />
+                        <GradientStop Color="#F0161616" Offset="0" />
+                        <GradientStop Color="#C0161616" Offset="0.18" />
+                        <GradientStop Color="#00161616" Offset="0.55" />
                     </LinearGradientBrush>
                 </Rectangle.Fill>
             </Rectangle>
@@ -144,7 +144,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- ─── LEFT: nav pane ─── -->
-            <Grid Grid.Column="0" Background="#88030101">
+            <Grid Grid.Column="0" Background="#88161616">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />   <!-- logo + app name -->
                     <RowDefinition Height="*"    />   <!-- nav buttons     -->
@@ -162,7 +162,7 @@
                     <Border Grid.Column="0" Width="36" Height="36"
                             CornerRadius="18" VerticalAlignment="Center">
                         <Border.Effect>
-                            <DropShadowEffect Color="#D92D39" BlurRadius="14"
+                            <DropShadowEffect Color="#323434" BlurRadius="14"
                                               ShadowDepth="0" Opacity="0.7" />
                         </Border.Effect>
                         <!-- Inner border: clips the image into a circle -->
@@ -185,28 +185,50 @@
                 </Grid>
 
                 <!-- Nav RadioButtons (GroupName enforces single-select) -->
-                <StackPanel Grid.Row="1">
+                                <StackPanel Grid.Row="1">
                     <RadioButton x:Name="NavHome"
                                  Content="Home"
                                  GroupName="Nav"
                                  Style="{StaticResource AkariNavBtn}"
                                  IsChecked="True"
                                  Click="Nav_Click" Tag="Home" />
-                    <RadioButton x:Name="NavDebloat"
-                                 Content="Debloat / Tweaks"
-                                 GroupName="Nav"
-                                 Style="{StaticResource AkariNavBtn}"
-                                 Click="Nav_Click" Tag="Debloat" />
-                    <RadioButton x:Name="NavGaming"
-                                 Content="Gaming Tweaks"
-                                 GroupName="Nav"
-                                 Style="{StaticResource AkariNavBtn}"
-                                 Click="Nav_Click" Tag="GamingTweaks" />
                     <RadioButton x:Name="NavAkariOS"
+                                 Content="Akari OS"
+                                 GroupName="Nav"
+                                 Style="{StaticResource AkariNavBtn}"
+                                 Click="Nav_Click" Tag="AkariOS" />
+                    <RadioButton x:Name="NavAkariOSTweaks"
                                  Content="Akari OS Tweaks"
                                  GroupName="Nav"
                                  Style="{StaticResource AkariNavBtn}"
                                  Click="Nav_Click" Tag="AkariOSTweaks" />
+                    <!-- Debloat / Tweaks: hidden for now. Set Visibility="Visible" to restore. -->
+                    <RadioButton x:Name="NavDebloat"
+                                 Content="Debloat / Tweaks"
+                                 GroupName="Nav"
+                                 Style="{StaticResource AkariNavBtn}"
+                                 Visibility="Collapsed"
+                                 Click="Nav_Click" Tag="Debloat" />
+                    <RadioButton x:Name="NavGaming"
+                                 Content="Gaming"
+                                 GroupName="Nav"
+                                 Style="{StaticResource AkariNavBtn}"
+                                 Click="Nav_Click" Tag="Gaming" />
+                    <RadioButton x:Name="NavPrivacy"
+                                 Content="Privacy"
+                                 GroupName="Nav"
+                                 Style="{StaticResource AkariNavBtn}"
+                                 Click="Nav_Click" Tag="Privacy" />
+                    <RadioButton x:Name="NavUpdate"
+                                 Content="Windows Updates"
+                                 GroupName="Nav"
+                                 Style="{StaticResource AkariNavBtn}"
+                                 Click="Nav_Click" Tag="Update" />
+                    <RadioButton x:Name="NavNotifications"
+                                 Content="Notifications"
+                                 GroupName="Nav"
+                                 Style="{StaticResource AkariNavBtn}"
+                                 Click="Nav_Click" Tag="Notifications" />
                     <RadioButton x:Name="NavDownloads"
                                  Content="Downloads"
                                  GroupName="Nav"
@@ -264,7 +286,7 @@
 
                 <!-- Status bar -->
                 <Border Grid.Row="2"
-                        Background="#CC030101"
+                        Background="#CC121212"
                         BorderBrush="#14FFFFFF"
                         BorderThickness="0,1,0,0"
                         Padding="16,6">
@@ -280,8 +302,8 @@
                                        Margin="0,0,8,0" Visibility="Collapsed"/>
                             <ProgressBar x:Name="LogProgress"
                                          Height="4" Width="180" Minimum="0" Maximum="100"
-                                         Foreground="{StaticResource AkariCrimson}"
-                                         Background="#26FF3C46" BorderThickness="0"
+                                         Foreground="{StaticResource AkariGrey}"
+                                         Background="#26FFFFFF" BorderThickness="0"
                                          Visibility="Collapsed"/>
                         </StackPanel>
                         <TextBox x:Name="TxtLog"

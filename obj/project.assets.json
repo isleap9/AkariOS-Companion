@@ -114,11 +114,11 @@
   "project": {
     "version": "2.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\isleap\\Documents\\GitHub\\AkariOS-Companion\\AkariOSCompanion.csproj",
+      "projectUniqueName": "c:\\Users\\isleap\\Documents\\AkariOS-Companion\\AkariOSCompanion_ypxafem2_wpftmp.csproj",
       "projectName": "AkariOSCompanion",
-      "projectPath": "C:\\Users\\isleap\\Documents\\GitHub\\AkariOS-Companion\\AkariOSCompanion.csproj",
+      "projectPath": "c:\\Users\\isleap\\Documents\\AkariOS-Companion\\AkariOSCompanion_ypxafem2_wpftmp.csproj",
       "packagesPath": "C:\\Users\\isleap\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\isleap\\Documents\\GitHub\\AkariOS-Companion\\obj\\",
+      "outputPath": "C:\\Users\\isleap\\Documents\\AkariOS-Companion\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\isleap\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -146,7 +146,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "10.0.300"
+      "SdkAnalysisLevel": "10.0.400"
     },
     "frameworks": {
       "net8.0-windows": {
@@ -176,19 +176,19 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[8.0.28, 8.0.28]"
+            "version": "[8.0.31, 8.0.31]"
           },
           {
             "name": "Microsoft.NETCore.App.Host.win-x64",
-            "version": "[8.0.28, 8.0.28]"
+            "version": "[8.0.31, 8.0.31]"
           },
           {
             "name": "Microsoft.NETCore.App.Ref",
-            "version": "[8.0.28, 8.0.28]"
+            "version": "[8.0.31, 8.0.31]"
           },
           {
             "name": "Microsoft.WindowsDesktop.App.Ref",
-            "version": "[8.0.28, 8.0.28]"
+            "version": "[8.0.31, 8.0.31]"
           }
         ],
         "frameworkReferences": {
@@ -199,7 +199,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

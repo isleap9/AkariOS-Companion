@@ -1,0 +1,1490 @@
+<Page
+    x:Class="AkariOSCompanion.Views.PrivacyPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="Privacy &amp; Security"
+    Background="Transparent">
+
+    <Page.Resources>
+        <!-- Compact toggle row: title + description left, control right -->
+        <Style x:Key="GamingRow" TargetType="Border">
+            <Setter Property="BorderBrush" Value="{StaticResource AkariBorderSoft}" />
+            <Setter Property="BorderThickness" Value="0,1,0,0" />
+            <Setter Property="Padding" Value="18,12" />
+        </Style>
+    </Page.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="36,28,40,60">
+
+            <!-- Page heading -->
+            <TextBlock Text="Privacy &amp; Security"
+                       FontFamily="{StaticResource AkariDisplay}"
+                       FontSize="22" FontWeight="Bold"
+                       Foreground="{StaticResource AkariText}" />
+            <TextBlock Text="Telemetry, data collection, app permissions, and AI opt-outs."
+                       FontSize="13" Style="{StaticResource Caption}"
+                       Margin="0,5,0,0" />
+
+            <!-- ══ Security ══ -->
+            <Border Style="{StaticResource AkariCardBorder}" Margin="0,20,0,0">
+                <StackPanel>
+                    <TextBlock Text="Security" Style="{StaticResource SectionHeader}"
+                               Margin="18,15,18,10" />
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="User Account Control Level" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls UAC notification level and secure desktop behavior" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ComboBox Grid.Column="1" Width="210" VerticalAlignment="Center"
+                                      SelectedIndex="0">
+                                <ComboBoxItem Content="Prompt for Credentials" />
+                                <ComboBoxItem Content="Always notify" />
+                                <ComboBoxItem Content="Notify when apps make changes" />
+                                <ComboBoxItem Content="Notify when apps make changes (no dim)" />
+                                <ComboBoxItem Content="Never notify" />
+                            </ComboBox>
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Workplace Join Message Prompts" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Show &apos;Allow my organization to manage my device&apos; prompts throughout Windows" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="BitLocker Auto Encryption" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether Windows can automatically encrypt drives with BitLocker" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="WiFi-Sense" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Allow sharing WiFi passwords with contacts and automatically connecting to suggested open hotspots" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Automatic Maintenance" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Choose if Windows should run automatic system maintenance tasks during idle time" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Windows Error Reporting" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Choose if Windows should collect and send crash reports and error information to Microsoft" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Remote Assistance" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Choose if other people can connect to your computer remotely to provide technical support" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Smart App Control" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls the Smart App Control feature which blocks untrusted and potentially dangerous applications" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ComboBox Grid.Column="1" Width="210" VerticalAlignment="Center"
+                                      SelectedIndex="0">
+                                <ComboBoxItem Content="Off (Recommended)" />
+                                <ComboBoxItem Content="On (Enforced)" />
+                                <ComboBoxItem Content="Evaluation Mode (Default)" />
+                            </ComboBox>
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Developer Mode" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Allows the installation of apps from any source, including loose files" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="PowerShell Execution Policy" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether PowerShell scripts are allowed to run and under what conditions for both the current user and the local machine" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ComboBox Grid.Column="1" Width="210" VerticalAlignment="Center"
+                                      SelectedIndex="0">
+                                <ComboBoxItem Content="Restricted" />
+                                <ComboBoxItem Content="AllSigned" />
+                                <ComboBoxItem Content="RemoteSigned" />
+                                <ComboBoxItem Content="Unrestricted" />
+                                <ComboBoxItem Content="Bypass" />
+                            </ComboBox>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- ══ Content Delivery &amp; Advertising ══ -->
+            <Border Style="{StaticResource AkariCardBorder}" Margin="0,20,0,0">
+                <StackPanel>
+                    <TextBlock Text="Content Delivery &amp; Advertising" Style="{StaticResource SectionHeader}"
+                               Margin="18,15,18,10" />
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Content Delivery" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Allows Windows to deliver promotional content and automatically install suggested apps" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Subscribed Content" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Enables promotional content subscriptions from Microsoft and partners throughout Windows" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Feature Management" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Enables Windows feature management functionality for promotional features and automatic app installations" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Soft Landing Experiences" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Displays tips and notifications about Windows features as you use the operating system" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="OEM Pre-installed Apps" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Prevents OEM manufacturers from automatically installing bloatware apps" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Pre-installed Suggested Apps" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Prevents Microsoft from automatically installing suggested apps" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Pre-installed Apps History Tracking" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Disables tracking of whether pre-installed apps were ever enabled" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Silent App Installation" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Prevents apps from being silently installed in the background" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- ══ Lock Screen ══ -->
+            <Border Style="{StaticResource AkariCardBorder}" Margin="0,20,0,0">
+                <StackPanel>
+                    <TextBlock Text="Lock Screen" Style="{StaticResource SectionHeader}"
+                               Margin="18,15,18,10" />
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Lock Screen" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Allows users to lock their computer using Windows+L, Start menu, or Ctrl+Alt+Del. Disabling prevents locking the workstation" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Windows Spotlight on Lock Screen" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Displays rotating Windows Spotlight images on your lock screen instead of a static background" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Lock Screen Fun Facts and Tips" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Displays fun facts, tips, and tricks as an overlay on your lock screen" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- ══ General ══ -->
+            <Border Style="{StaticResource AkariCardBorder}" Margin="0,20,0,0">
+                <StackPanel>
+                    <TextBlock Text="General" Style="{StaticResource SectionHeader}"
+                               Margin="18,15,18,10" />
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Let apps show personalized ads by using my advertising ID" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Windows generates a unique advertising ID that apps use to track your activity and deliver personalized ads" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Let websites show locally relevant content by accessing my language list" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Allows websites to access your language preferences so they can display content in your preferred language" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Let Windows improve Start and search results by tracking app launches" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Windows records which apps you use most frequently to personalize your Start menu and improve search results" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Show me suggested content in the Settings app" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Displays promotional content, tips, and feature suggestions within the Windows Settings app" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Settings App Notifications" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Shows account notifications in the Settings app, including prompts to reauthenticate and backup your device" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- ══ Speech ══ -->
+            <Border Style="{StaticResource AkariCardBorder}" Margin="0,20,0,0">
+                <StackPanel>
+                    <TextBlock Text="Speech" Style="{StaticResource SectionHeader}"
+                               Margin="18,15,18,10" />
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Online Speech Recognition" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Use your voice for apps using Microsoft&apos;s online speech recognition technology" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Narrator Online Services" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Allow Narrator to use Microsoft cloud services for features like intelligent image descriptions" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Narrator Scripting Support" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Allow Narrator to execute scripts for automation and custom functionality" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- ══ Inking &amp; Typing Personalization ══ -->
+            <Border Style="{StaticResource AkariCardBorder}" Margin="0,20,0,0">
+                <StackPanel>
+                    <TextBlock Text="Inking &amp; Typing Personalization" Style="{StaticResource SectionHeader}"
+                               Margin="18,15,18,10" />
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Custom Inking and Typing Dictionary" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Uses your typing history and handwriting patterns to create a custom dictionary" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- ══ Diagnostics &amp; Feedback ══ -->
+            <Border Style="{StaticResource AkariCardBorder}" Margin="0,20,0,0">
+                <StackPanel>
+                    <TextBlock Text="Diagnostics &amp; Feedback" Style="{StaticResource SectionHeader}"
+                               Margin="18,15,18,10" />
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Send Diagnostic Data" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Send diagnostic data to Microsoft to help improve Windows and keep it secure" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Improve inking and typing" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Send optional inking and typing diagnostic data to Microsoft" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Tailored Experiences" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Let Microsoft use your diagnostic data to show personalized tips, ads and recommendations" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Allow Windows to ask you for feedback" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Let Windows ask you to provide feedback on experiences in Windows" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- ══ Search Permissions ══ -->
+            <Border Style="{StaticResource AkariCardBorder}" Margin="0,20,0,0">
+                <StackPanel>
+                    <TextBlock Text="Search Permissions" Style="{StaticResource SectionHeader}"
+                               Margin="18,15,18,10" />
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Search history on this device" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Improves search results by allowing Windows Search to store your search history locally" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Show search highlights" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="See content suggestions in search" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Cloud Content Search (Microsoft account)" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Allow Windows Search to show results from services signed in with your Microsoft account" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Cloud Content Search (Work or School account)" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Allow Windows Search to show results from services signed in with your work or school account" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Allow Cortana" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Enables Microsoft&apos;s Cortana virtual assistant for voice commands and searches" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- ══ Activity History ══ -->
+            <Border Style="{StaticResource AkariCardBorder}" Margin="0,20,0,0">
+                <StackPanel>
+                    <TextBlock Text="Activity History" Style="{StaticResource SectionHeader}"
+                               Margin="18,15,18,10" />
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Activity History" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Allows Windows to jump back into what you were doing with apps, docs, or other activities on startup (Windows 10 Timeline feature)" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Timeline Suggestions" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Shows suggestions in the Windows 10 Timeline feature based on your activity history" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- ══ App Permissions ══ -->
+            <Border Style="{StaticResource AkariCardBorder}" Margin="0,20,0,0">
+                <StackPanel>
+                    <TextBlock Text="App Permissions" Style="{StaticResource SectionHeader}"
+                               Margin="18,15,18,10" />
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Location Services" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Allows Windows and apps to access your device location for location-based features" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Camera Access" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Allow apps to have camera access" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Microphone Access" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Allow apps to have microphone access" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Account Info Access" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Allow apps to have account info access" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="App Diagnostic Access" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Allow apps to have app diagnostic access" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="OneDrive Automatic Backups" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether OneDrive automatically backs up your Documents, Pictures, and Desktop folders" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- ══ Windows AI ══ -->
+            <Border Style="{StaticResource AkariCardBorder}" Margin="0,20,0,0">
+                <StackPanel>
+                    <TextBlock Text="Windows AI" Style="{StaticResource SectionHeader}"
+                               Margin="18,15,18,10" />
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Windows Copilot" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether Windows Copilot is available system-wide" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="AI Data Analysis" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether Windows AI can analyze user data for personalization and recommendations" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Recall Enablement" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether Windows Recall can be enabled via policy" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Recall Saving Snapshots" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Allows Windows Recall to save screenshots of your activity for later recall" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Click to Do" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether the Click to Do AI feature is available in Windows" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="AI Settings Agent" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether the AI-powered Settings Agent is available in Windows" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="AI Agent Connectors" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether AI agents can use connectors to access external services" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="AI Agent Workspaces" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether AI Agent Workspaces are available in Windows" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Remote AI Agent Connectors" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether AI agents can use remote connectors to access remote services" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Copilot Hardware Key" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether the dedicated Copilot key on keyboards opens Copilot" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Copilot Runtime" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether the Copilot runtime is allowed to run via policy" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Copilot Availability" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether Copilot is available in the Windows Shell" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Bing Chat Eligibility" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether the user is eligible for Bing Chat and Copilot in Search" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Generative AI Access" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether apps can access the generative AI capability on your device" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="System AI Models Access" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether apps can access system AI models on your device" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Copilot Microphone Access" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether Copilot and Office Hub apps have microphone permission" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Input Insights" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether Windows Input Insights can track typing patterns and provide suggestions" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Copilot Nudges" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether Copilot promotional nudges and background task notifications are shown" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="AI Consumer Content" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether AI-driven consumer account content recommendations are shown" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Paint AI Image Creator" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether the AI Image Creator feature is available in Microsoft Paint" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Paint AI Cocreator" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether the AI Cocreator feature is available in Microsoft Paint" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Paint Generative Fill" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether the AI Generative Fill feature is available in Microsoft Paint" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Paint Generative Erase" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether the AI Generative Erase feature is available in Microsoft Paint" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Paint Remove Background" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether the AI Remove Background feature is available in Microsoft Paint" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- ══ Microsoft Edge AI ══ -->
+            <Border Style="{StaticResource AkariCardBorder}" Margin="0,20,0,0">
+                <StackPanel>
+                    <TextBlock Text="Microsoft Edge AI" Style="{StaticResource SectionHeader}"
+                               Margin="18,15,18,10" />
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Edge Copilot CDP Page Context" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether Copilot can use CDP to access page content in Microsoft Edge" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Edge Copilot Page Context" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether Copilot can read page content in Microsoft Edge" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Edge Copilot Sidebar" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether the Copilot sidebar is available in Microsoft Edge" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Edge Entra Copilot Page Context" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether Entra Copilot can access page context in Microsoft Edge" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Edge M365 Copilot Chat Icon" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether the Microsoft 365 Copilot chat icon is shown in Microsoft Edge" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Edge AI History Search" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether AI-powered history search is available in Microsoft Edge" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Edge Inline AI Compose" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether AI-powered inline compose suggestions are available in Microsoft Edge" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Edge Local AI Model Settings" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether local AI model settings are available in Microsoft Edge" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Edge Built-in AI APIs" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether built-in AI APIs are available in Microsoft Edge for websites to use" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Edge AI Generated Themes" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether AI-generated themes are available in Microsoft Edge" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Edge DevTools AI" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether AI features are available in Edge DevTools" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Edge Share History with Copilot" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether browsing history is shared with Copilot search in Microsoft Edge" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- ══ Microsoft Office AI ══ -->
+            <Border Style="{StaticResource AkariCardBorder}" Margin="0,20,0,0">
+                <StackPanel>
+                    <TextBlock Text="Microsoft Office AI" Style="{StaticResource SectionHeader}"
+                               Margin="18,15,18,10" />
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Office AI Training" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether Office collects AI training data from your usage" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Office Connected Services" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether Office connected experiences and AI-powered services are available" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Word Copilot" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether Copilot AI features are available in Microsoft Word" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Excel Copilot" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether Copilot AI features are available in Microsoft Excel" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="OneNote Copilot" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether Copilot AI features, Copilot notebooks, and Copilot skittle are available in Microsoft OneNote" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Office AI Content Safety" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Controls whether AI content safety features are available in Office apps" FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</Page>

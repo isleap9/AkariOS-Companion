@@ -7,8 +7,8 @@
 
     <Page.Resources>
         <Style x:Key="RunBtn" TargetType="Button">
-            <Setter Property="Background" Value="#D92D39"/>
-            <Setter Property="Foreground" Value="#F0EAEB"/>
+            <Setter Property="Background" Value="#323434"/>
+            <Setter Property="Foreground" Value="#F2F2F2"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Padding" Value="14,5"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -23,10 +23,10 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="#EC5862"/>
+                                <Setter TargetName="bd" Property="Background" Value="#5A5A5A"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="#B02030"/>
+                                <Setter TargetName="bd" Property="Background" Value="#3A3A3A"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -35,21 +35,21 @@
         </Style>
 
         <Style x:Key="UndoBtn" TargetType="Button" BasedOn="{StaticResource RunBtn}">
-            <Setter Property="Background" Value="#2A2A3A"/>
-            <Setter Property="Foreground" Value="#8A7E80"/>
+            <Setter Property="Background" Value="#2A2A2A"/>
+            <Setter Property="Foreground" Value="#9E9E9E"/>
             <Setter Property="Margin" Value="0"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="bd" Background="{TemplateBinding Background}"
-                                BorderBrush="#26FF3C46" BorderThickness="1"
+                                BorderBrush="#26FFFFFF" BorderThickness="1"
                                 CornerRadius="5" Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="#3A2A2A"/>
-                                <Setter Property="Foreground" Value="#C8BCBE"/>
+                                <Setter TargetName="bd" Property="Background" Value="#333333"/>
+                                <Setter Property="Foreground" Value="#CFCFCF"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>

@@ -30,12 +30,17 @@ public class ToolService
 
     // ── Logging ───────────────────────────────────────────────────────────────
 
-    public void Log(string message) =>
+    public void Log(string message)
+    {
+        // Durable record first: the on-screen box is lost when the window closes.
+        AppLog.Write(message);
+
         _log.Dispatcher.Invoke(() =>
         {
             _log.AppendText(message + Environment.NewLine);
             _log.ScrollToEnd();
         });
+    }
 
     // ── Progress bar ──────────────────────────────────────────────────────────
 

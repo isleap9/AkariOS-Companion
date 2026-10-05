@@ -2,28 +2,29 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- ===== Akari OS Companion palette (black / crimson) ===== -->
+    <!-- ===== Akari OS Companion palette (black / slate grey) ===== -->
 
     <!-- Surfaces -->
-    <SolidColorBrush x:Key="AkariBg"          Color="#FF060304" />
-    <SolidColorBrush x:Key="AkariContentBg"   Color="#FF070304" />
-    <SolidColorBrush x:Key="AkariCard"        Color="#8C160709" />
-    <SolidColorBrush x:Key="AkariCardHover"   Color="#B3220A0D" />
-    <SolidColorBrush x:Key="AkariInput"       Color="#99160709" />
+    <SolidColorBrush x:Key="AkariBg"          Color="#FF161616" />
+    <SolidColorBrush x:Key="AkariContentBg"   Color="#FF121212" />
+    <SolidColorBrush x:Key="AkariCard"        Color="#8C1E1E1E" />
+    <SolidColorBrush x:Key="AkariCardHover"   Color="#B32A2A2A" />
+    <SolidColorBrush x:Key="AkariInput"       Color="#991E1E1E" />
 
-    <!-- Accent -->
-    <SolidColorBrush x:Key="AkariCrimson"      Color="#FFD92D39" />
-    <SolidColorBrush x:Key="AkariCrimsonLight" Color="#FFEC5862" />
-    <Color           x:Key="AkariCrimsonColor">#FFD92D39</Color>
+    <!-- Grey Accent -->
+    <SolidColorBrush x:Key="AkariGrey"      Color="#FF323434" />
+    <SolidColorBrush x:Key="AkariGreyLight" Color="#FF5A5A5A" />
+    <SolidColorBrush x:Key="AkariGreyDim"   Color="#FF9E9E9E" />
+    <Color           x:Key="AkariGreyColor">#FF323434</Color>
 
     <!-- Text -->
-    <SolidColorBrush x:Key="AkariText"     Color="#FFF0EAEB" />
-    <SolidColorBrush x:Key="AkariTextDim"  Color="#FFC8BCBE" />
-    <SolidColorBrush x:Key="AkariMuted"    Color="#FF8A7E80" />
-    <SolidColorBrush x:Key="AkariFaint"    Color="#FF6A5B5D" />
+    <SolidColorBrush x:Key="AkariText"     Color="#FFF2F2F2" />
+    <SolidColorBrush x:Key="AkariTextDim"  Color="#FFCFCFCF" />
+    <SolidColorBrush x:Key="AkariMuted"    Color="#FF9E9E9E" />
+    <SolidColorBrush x:Key="AkariFaint"    Color="#FF7A7A7A" />
 
     <!-- Lines / borders -->
-    <SolidColorBrush x:Key="AkariBorder"     Color="#26FF3C46" />
+    <SolidColorBrush x:Key="AkariBorder"     Color="#26FFFFFF" />
     <SolidColorBrush x:Key="AkariBorderSoft" Color="#14FFFFFF" />
 
     <!-- Status -->
@@ -31,7 +32,7 @@
     <SolidColorBrush x:Key="AkariOnline" Color="#FF5FD47A" />
 
     <!-- Download category accents -->
-    <SolidColorBrush x:Key="CatBrowsers"  Color="#FFEC5862" />
+    <SolidColorBrush x:Key="CatBrowsers"  Color="#FF8A8A8A" />
     <SolidColorBrush x:Key="CatComms"     Color="#FFE0A23A" />
     <SolidColorBrush x:Key="CatDev"       Color="#FF6AA8EC" />
     <SolidColorBrush x:Key="CatGaming"    Color="#FFD6589E" />

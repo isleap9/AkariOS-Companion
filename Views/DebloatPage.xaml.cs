@@ -25,12 +25,12 @@ public partial class DebloatPage : Page
             Text = "Debloat / Tweaks",
             FontFamily = (FontFamily)FindResource("AkariDisplay"),
             FontSize = 22, FontWeight = FontWeights.Bold,
-            Foreground = Brush("#F0EAEB"), Margin = new Thickness(0, 0, 0, 4)
+            Foreground = Brush("#F2F2F2"), Margin = new Thickness(0, 0, 0, 4)
         });
         Add(new TextBlock
         {
             Text = "Run or undo PowerShell-backed privacy, performance, and cleanup tweaks.",
-            FontSize = 13, Foreground = Brush("#8A7E80"),
+            FontSize = 13, Foreground = Brush("#9E9E9E"),
             Margin = new Thickness(0, 0, 0, 20), TextWrapping = TextWrapping.Wrap
         });
 
@@ -93,14 +93,14 @@ public partial class DebloatPage : Page
         {
             Text = title,
             FontSize = 15, FontWeight = FontWeights.SemiBold,
-            Foreground = Brush("#F0EAEB"),
+            Foreground = Brush("#F2F2F2"),
             Margin = new Thickness(0, 16, 0, 6)
         });
 
         var card = new Border
         {
-            Background = Brush("#8C130508"),
-            BorderBrush = Brush("#26FF3C46"),
+            Background = Brush("#8C1E1E1E"),
+            BorderBrush = Brush("#26FFFFFF"),
             BorderThickness = new Thickness(1),
             CornerRadius = new CornerRadius(10),
             Margin = new Thickness(0, 0, 0, 4)
@@ -121,11 +121,11 @@ public partial class DebloatPage : Page
             info.Children.Add(new TextBlock
             {
                 Text = itemTitle, FontSize = 13, FontWeight = FontWeights.SemiBold,
-                Foreground = Brush("#F0EAEB")
+                Foreground = Brush("#F2F2F2")
             });
             info.Children.Add(new TextBlock
             {
-                Text = desc, FontSize = 12, Foreground = Brush("#8A7E80"),
+                Text = desc, FontSize = 12, Foreground = Brush("#9E9E9E"),
                 Margin = new Thickness(0, 2, 0, 0), TextWrapping = TextWrapping.Wrap
             });
 

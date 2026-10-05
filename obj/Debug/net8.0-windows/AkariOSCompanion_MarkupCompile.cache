@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\isleap\Documents\GitHub\AkariOS-Companion\obj\Debug\net8.0-windows\
+C:\Users\isleap\Documents\AkariOS-Companion\obj\Debug\net8.0-windows\
 AkariOSCompanion
 none
 false
-TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
-C:\Users\isleap\Documents\GitHub\AkariOS-Companion\App.xaml
-101391808451
+TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP1_0_OR_GREATER;NETCOREAPP1_1_OR_GREATER;NETCOREAPP2_0_OR_GREATER;NETCOREAPP2_1_OR_GREATER;NETCOREAPP2_2_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
+C:\Users\isleap\Documents\AkariOS-Companion\App.xaml
+14-345352611
 
-351117492574
-400-312993694
-MainWindow.xaml;Themes\Colors.xaml;Themes\Controls.xaml;Views\AkariOSTweaksPage.xaml;Views\Controls.xaml;Views\DebloatPage.xaml;Views\DownloadsPage.xaml;Views\GamingTweaksPage.xaml;Views\HomePage.xaml;Views\MiscPage.xaml;
+40-1944638160
+200408041384
+MainWindow.xaml;Themes\Colors.xaml;Themes\Controls.xaml;Views\AkariOSPage.xaml;Views\AkariOSTweaksPage.xaml;Views\Controls.xaml;Views\DebloatPage.xaml;Views\DownloadsPage.xaml;Views\GamingPage.xaml;Views\HomePage.xaml;Views\MiscPage.xaml;Views\NotificationsPage.xaml;Views\PrivacyPage.xaml;Views\UpdatePage.xaml;
 
-False
+True
 

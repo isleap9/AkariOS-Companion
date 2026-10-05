@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
@@ -59,4 +60,30 @@ public sealed class CategoryActiveConverter : IMultiValueConverter
 
     public object[] ConvertBack(object value, Type[] t, object p, CultureInfo c)
         => Array.Empty<object>();
+}
+
+/// <summary>True -> Visible, False/null -> Collapsed. Inverts via a "Collapse" parameter.</summary>
+public sealed class BoolToVisibilityConverter : IValueConverter
+{
+    /// <summary>Pass "invert" to flip the mapping.</summary>
+    public object Convert(object value, Type t, object p, CultureInfo c)
+    {
+        var flag = value is bool b && b;
+        if (string.Equals(p as string, "invert", StringComparison.OrdinalIgnoreCase))
+            flag = !flag;
+        return flag ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    public object ConvertBack(object v, Type t, object p, CultureInfo c) => Binding.DoNothing;
+}
+
+/// <summary>Null/empty string -> Collapsed, otherwise Visible.</summary>
+public sealed class NullToVisibilityConverter : IValueConverter
+{
+    public object Convert(object value, Type t, object p, CultureInfo c) =>
+        value is null || string.IsNullOrWhiteSpace(value as string)
+            ? Visibility.Collapsed
+            : Visibility.Visible;
+
+    public object ConvertBack(object v, Type t, object p, CultureInfo c) => Binding.DoNothing;
 }

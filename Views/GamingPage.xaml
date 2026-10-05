@@ -1,0 +1,91 @@
+<Page
+    x:Class="AkariOSCompanion.Views.GamingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:vm="clr-namespace:AkariOSCompanion.ViewModels"
+    Title="Gaming &amp; Performance"
+    Background="Transparent"
+    d:DataContext="{d:DesignInstance Type=vm:GamingViewModel}"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <Style x:Key="GamingRow" TargetType="Border">
+            <Setter Property="BorderBrush" Value="{StaticResource AkariBorderSoft}" />
+            <Setter Property="BorderThickness" Value="0,1,0,0" />
+            <Setter Property="Padding" Value="18,12" />
+        </Style>
+    </Page.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="36,28,40,60">
+
+            <!-- Page heading -->
+            <TextBlock Text="Gaming &amp; Performance"
+                       FontFamily="{StaticResource AkariDisplay}"
+                       FontSize="22" FontWeight="Bold"
+                       Foreground="{StaticResource AkariText}" />
+            <TextBlock Text="Game Mode, GPU, CPU, and network tweaks for maximum frame rates."
+                       FontSize="13" Style="{StaticResource Caption}"
+                       Margin="0,5,0,20" />
+
+            <!-- Live settings, grouped by catalog section -->
+            <ItemsControl ItemsSource="{Binding Sections}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Style="{StaticResource AkariCardBorder}" Margin="0,0,0,16">
+                            <StackPanel>
+                                <TextBlock Text="{Binding Title}" Style="{StaticResource SectionHeader}"
+                                           Margin="18,15,18,10" />
+                                <ItemsControl ItemsSource="{Binding Items}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Style="{StaticResource GamingRow}">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                                        <TextBlock Text="{Binding Name}"
+                                                                   FontSize="13.5" FontWeight="SemiBold"
+                                                                   Foreground="{StaticResource AkariText}"
+                                                                   TextWrapping="Wrap" />
+                                                        <TextBlock Text="{Binding Description}" FontSize="12"
+                                                                   Style="{StaticResource Caption}"
+                                                                   Margin="0,2,0,0" TextWrapping="Wrap" />
+                                                        <TextBlock Text="{Binding Status}" FontSize="11"
+                                                                   Foreground="{StaticResource AkariFaint}"
+                                                                   Margin="0,3,0,0" TextWrapping="Wrap"
+                                                                   Visibility="{Binding Status, Converter={StaticResource NullToVis}}" />
+                                                    </StackPanel>
+
+                                                    <!-- Dropdown for Selection settings -->
+                                                    <ComboBox Grid.Column="1" Width="210"
+                                                              VerticalAlignment="Center"
+                                                              ItemsSource="{Binding Options}"
+                                                              SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"
+                                                              DisplayMemberPath="DisplayName"
+                                                              Visibility="{Binding IsSelection, Converter={StaticResource BoolToVis}}" />
+
+                                                    <!-- Switch for Toggle settings -->
+                                                    <ui:ToggleSwitch Grid.Column="1"
+                                                                     VerticalAlignment="Center"
+                                                                     IsChecked="{Binding IsOn, Mode=TwoWay}"
+                                                                     Visibility="{Binding IsSelection, Converter={StaticResource BoolToVis}, ConverterParameter=invert}" />
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+        </StackPanel>
+    </ScrollViewer>
+</Page>

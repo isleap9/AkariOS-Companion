@@ -22,7 +22,7 @@
         <Setter Property="FontFamily" Value="{StaticResource AkariDisplay}" />
         <Setter Property="FontSize" Value="17" />
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="Foreground" Value="{StaticResource AkariCrimsonLight}" />
+        <Setter Property="Foreground" Value="{StaticResource AkariGreyLight}" />
         <Setter Property="Margin" Value="0,24,0,12" />
     </Style>
 
@@ -52,7 +52,7 @@
     <Style x:Key="VendorButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="Height" Value="44" />
         <Setter Property="Foreground" Value="{StaticResource AkariTextDim}" />
-        <Setter Property="Background" Value="#8C1E0C0E" />
+        <Setter Property="Background" Value="#8C242424" />
         <Setter Property="BorderBrush" Value="{StaticResource AkariBorder}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="FontSize" Value="13" />
@@ -68,12 +68,12 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="bd" Property="Background" Value="#28E0303A" />
-                            <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource AkariCrimson}" />
+                            <Setter TargetName="bd" Property="Background" Value="#28343434" />
+                            <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource AkariGrey}" />
                             <Setter Property="Foreground" Value="{StaticResource AkariText}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="bd" Property="Background" Value="#40E0303A" />
+                            <Setter TargetName="bd" Property="Background" Value="#40343434" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -81,7 +81,7 @@
         </Setter>
     </Style>
 
-    <!-- ===== NavigationViewItem — text-only, crimson left accent bar on selection ===== -->
+    <!-- ===== NavigationViewItem — text-only, grey left accent bar on selection ===== -->
     <Style x:Key="AkariNavItem" TargetType="ListBoxItem">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{StaticResource AkariMuted}" />
@@ -118,8 +118,8 @@
                             <Setter Property="Foreground" Value="{StaticResource AkariTextDim}" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="bg" Property="Background" Value="#18D92D39" />
-                            <Setter TargetName="accent" Property="Fill" Value="{StaticResource AkariCrimson}" />
+                            <Setter TargetName="bg" Property="Background" Value="#18323434" />
+                            <Setter TargetName="accent" Property="Fill" Value="{StaticResource AkariGrey}" />
                             <Setter Property="Foreground" Value="{StaticResource AkariText}" />
                         </Trigger>
                     </ControlTemplate.Triggers>

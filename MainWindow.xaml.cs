@@ -34,12 +34,17 @@ public partial class MainWindow : FluentWindow
         Page page = btn.Tag?.ToString() switch
         {
             "Home"          => new HomePage(),
+            "Gaming"        => new GamingPage(),
+            "Privacy"       => new PrivacyPage(),
+            "Update"        => new UpdatePage(),
+            "Notifications" => new NotificationsPage(),
             "Debloat"       => new DebloatPage(),
-            "GamingTweaks"  => new GamingTweaksPage(),
+            "AkariOS"  => new AkariOSPage(),
             "AkariOSTweaks" => new AkariOSTweaksPage(),
             "Downloads"     => new DownloadsPage(),
             "Misc"          => new MiscPage(),
-            _               => new HomePage()
+            null            => new HomePage(),
+            _               => new HomePage(),
         };
 
         PageFrame.Navigate(page);

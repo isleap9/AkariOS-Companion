@@ -20,7 +20,7 @@ public static class AppNavigation
         Page page = pageType.Name switch
         {
             nameof(HomePage)           => new HomePage(),
-            nameof(GamingTweaksPage)   => new GamingTweaksPage(),
+            nameof(AkariOSPage)   => new AkariOSPage(),
             nameof(AkariOSTweaksPage)  => new AkariOSTweaksPage(),
             nameof(DownloadsPage)      => new DownloadsPage(),
             nameof(MiscPage)           => new MiscPage(),

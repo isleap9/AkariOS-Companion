@@ -48,8 +48,8 @@
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="bd"
-                                            Background="#8C130508"
-                                            BorderBrush="#26FF3C46"
+                                            Background="#8C1E1E1E"
+                                            BorderBrush="#26FFFFFF"
                                             BorderThickness="1"
                                             CornerRadius="12"
                                             Padding="26,0">
@@ -60,16 +60,16 @@
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
 
-                                            <!-- Crimson icon square -->
+                                            <!-- Grey icon square -->
                                             <Border Grid.Column="0"
                                                     Width="56" Height="56"
                                                     CornerRadius="13"
-                                                    Background="#30D92D39"
+                                                    Background="#30323434"
                                                     VerticalAlignment="Center">
                                                 <TextBlock Text="{Binding Glyph}"
                                                            FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
                                                            FontSize="26"
-                                                           Foreground="{StaticResource AkariCrimson}"
+                                                           Foreground="{StaticResource AkariGrey}"
                                                            HorizontalAlignment="Center"
                                                            VerticalAlignment="Center" />
                                             </Border>
@@ -94,17 +94,17 @@
                                                        Text="&#xE76C;"
                                                        FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
                                                        FontSize="16"
-                                                       Foreground="#55E0303A"
+                                                       Foreground="#55323434"
                                                        VerticalAlignment="Center" />
                                         </Grid>
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="bd" Property="Background" Value="#B3220A0D" />
-                                            <Setter TargetName="bd" Property="BorderBrush" Value="#55D92D39" />
+                                            <Setter TargetName="bd" Property="Background" Value="#B32A2A2A" />
+                                            <Setter TargetName="bd" Property="BorderBrush" Value="#55323434" />
                                         </Trigger>
                                         <Trigger Property="IsPressed" Value="True">
-                                            <Setter TargetName="bd" Property="Background" Value="#CC2A0D10" />
+                                            <Setter TargetName="bd" Property="Background" Value="#CC333333" />
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>

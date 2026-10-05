@@ -1,0 +1,312 @@
+<Page
+    x:Class="AkariOSCompanion.Views.NotificationsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="Notifications"
+    Background="Transparent">
+
+    <Page.Resources>
+        <!-- Compact toggle row: title + description left, control right -->
+        <Style x:Key="GamingRow" TargetType="Border">
+            <Setter Property="BorderBrush" Value="{StaticResource AkariBorderSoft}" />
+            <Setter Property="BorderThickness" Value="0,1,0,0" />
+            <Setter Property="Padding" Value="18,12" />
+        </Style>
+    </Page.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="36,28,40,60">
+
+            <!-- Page heading -->
+            <TextBlock Text="Notifications"
+                       FontFamily="{StaticResource AkariDisplay}"
+                       FontSize="22" FontWeight="Bold"
+                       Foreground="{StaticResource AkariText}" />
+            <TextBlock Text="Notification behavior and system alerts"
+                       FontSize="13" Style="{StaticResource Caption}"
+                       Margin="0,5,0,0" />
+
+            <!-- ══ General ══ -->
+            <Border Style="{StaticResource AkariCardBorder}" Margin="0,20,0,0">
+                <StackPanel>
+                    <TextBlock Text="General" Style="{StaticResource SectionHeader}"
+                               Margin="18,15,18,10" />
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Push Notifications" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Allows apps to send push notifications through Windows Push Notification Service." FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Notification Sounds" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Plays a sound when notifications arrive." FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Notifications on Lock Screen" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Shows notification banners on the lock screen." FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Critical Notifications on Lock Screen" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Shows critical notifications on the lock screen even when Do Not Disturb is on." FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Notification Bell Icon" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Shows the notification bell icon in the taskbar." FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Action Center" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Shows the Action Center panel accessible from the taskbar." FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- ══ Additional Settings ══ -->
+            <Border Style="{StaticResource AkariCardBorder}" Margin="0,20,0,0">
+                <StackPanel>
+                    <TextBlock Text="Additional Settings" Style="{StaticResource SectionHeader}"
+                               Margin="18,15,18,10" />
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Windows Welcome Experience" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Shows the Windows welcome experience after updates and when signing in to highlight new features." FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Suggested Settings Engagement" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Shows suggested settings and engagement prompts in Windows notifications." FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Tips and Suggestions Notifications" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Shows tips, tricks, and suggestions as you use Windows." FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Settings App Suggestions" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Shows suggestions and recommended content in the Windows Settings app." FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- ══ System Notifications ══ -->
+            <Border Style="{StaticResource AkariCardBorder}" Margin="0,20,0,0">
+                <StackPanel>
+                    <TextBlock Text="System Notifications" Style="{StaticResource SectionHeader}"
+                               Margin="18,15,18,10" />
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Capability Access Notifications" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Notifies when apps access sensitive capabilities like camera, microphone, or location." FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Startup App Notifications" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Notifies when apps are prevented from running at startup." FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Clock Change Notifications" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Notifies about automatic clock changes for daylight saving time." FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- ══ Privacy Notifications ══ -->
+            <Border Style="{StaticResource AkariCardBorder}" Margin="0,20,0,0">
+                <StackPanel>
+                    <TextBlock Text="Privacy Notifications" Style="{StaticResource SectionHeader}"
+                               Margin="18,15,18,10" />
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Location Access Notifications" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Notifies when apps request access to your location." FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- ══ Security Notifications ══ -->
+            <Border Style="{StaticResource AkariCardBorder}" Margin="0,20,0,0">
+                <StackPanel>
+                    <TextBlock Text="Security Notifications" Style="{StaticResource SectionHeader}"
+                               Margin="18,15,18,10" />
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Windows Security Notifications" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Shows notifications from Windows Security about device health and safety." FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource GamingRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Security and Maintenance Notifications" FontSize="13.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
+                                <TextBlock Text="Shows notifications from the Security and Maintenance center about system health." FontSize="12"
+                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</Page>
