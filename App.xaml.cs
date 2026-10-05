@@ -19,7 +19,8 @@ public partial class App : Application
     public static ISettingStateReader StateReader { get; } =
         new SettingStateReader(Registry, Tasks);
     public static ISettingOperationExecutor Executor { get; } =
-        new SettingOperationExecutor(Registry, Tasks, msg => AppLog.Write(msg));
+        new SettingOperationExecutor(Registry, Tasks,
+            msg => { if (App.Tool is not null) App.Tool.Log(msg); else AppLog.Write(msg); });
 
     /// <summary>
     /// Set by MainWindow after InitializeComponent() so TxtLog/LogProgress exist.

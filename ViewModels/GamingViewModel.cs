@@ -69,7 +69,11 @@ public partial class GamingSettingItem : ObservableObject
         }
         _isOn = state.IsEnabled;
         _selectedIndex = state.CurrentIndex;
-        Status = state.IsCustomState ? "Custom" : null;
+
+        // Preserve an outstanding restart notice; only replace the label when the
+        // read found a genuinely custom value.
+        if (state.IsCustomState) Status = "Custom";
+        else if (Status is not ("Applied" or "Applied - restart required")) Status = null;
         OnPropertyChanged(nameof(IsOn));
         OnPropertyChanged(nameof(SelectedIndex));
         OnPropertyChanged(nameof(Status));
@@ -81,34 +85,71 @@ public partial class GamingSettingItem : ObservableObject
     {
         if (_definition.RequiresConfirmation)
         {
-            _log($"[CONFIRM] {_definition.Name}: {(enabled ? _definition.EnableWarning : _definition.DisableWarning) ?? "apply?"}");
+            var warn = enabled ? _definition.EnableWarning : _definition.DisableWarning;
+            _log($"[CONFIRM] {_definition.Name}: {warn ?? "apply this change?"}");
         }
+
+        // Announce the attempt, the target state, and whether a reboot is expected —
+        // before the write, so the user always sees that something is happening.
+        var expectRestart = _definition.RequiresRestart;
+        _log($"[APPLY] {_definition.Name}: {(enabled ? "ON" : "OFF")}"
+            + (expectRestart ? " (reboot required to take effect)" : ""));
+
         var result = _executor.ApplyToggle(_definition, enabled);
-        Report(result.Success, result);
+        Report(result.Success, result, enabled ? "ON" : "OFF", expectRestart);
         Refresh();
     }
 
     private void ApplySelection(int index)
     {
         if (index < 0) return;
+        var options = _definition.ComboBox?.Options;
+        var label = options is not null && index < options.Count
+            ? options[index].DisplayName
+            : $"index {index}";
+
+        var expectRestart = _definition.RequiresRestart;
+        _log($"[APPLY] {_definition.Name}: \"{label}\""
+            + (expectRestart ? " (reboot required to take effect)" : ""));
+
         var result = _executor.ApplySelection(_definition, index);
-        Report(result.Success, result);
+        Report(result.Success, result, $"\"{label}\"", expectRestart);
         Refresh();
     }
 
-    private void Report(bool ok, OperationResult result)
+    /// <summary>
+    /// Reports the outcome of every apply to the user: what was attempted, whether
+    /// it succeeded, exactly which registry writes landed, and whether a reboot is
+    /// needed. Nothing is applied silently.
+    /// </summary>
+    private void Report(bool ok, OperationResult result, string what, bool expectRestart)
     {
-        if (ok)
+        var name = _definition.Name;
+
+        if (!ok)
         {
-            Status = null;
-            if (result.RequiresRestart is not null) _log($"[RESTART] {result.RequiresRestart}");
+            Status = "Failed";
+            _log($"[FAIL] {name}: could not apply {what}");
+            _log($"       reason: {result.ErrorMessage}");
+            foreach (var f in result.Failures) _log($"       failed: {f}");
+            return;
         }
+
+        // Row label tells the user the state of the change at a glance.
+        Status = expectRestart ? "Applied - restart required" : "Applied";
+
+        _log($"[OK] {name}: {what} applied ({result.AppliedCount} write(s))");
+
+        // Spell out each individual registry write so nothing is hidden.
+        foreach (var w in result.AppliedWrites)
+            _log($"       wrote {w}");
+
+        if (expectRestart)
+            _log($"[RESTART] {name}: a restart is required before this takes effect.");
         else
-        {
-            Status = result.ErrorMessage;
-            _log($"[ERROR] {result.ErrorMessage}");
-        }
+            _log($"[DONE] {name}: no restart needed.");
     }
+
 }
 
 /// <summary>A catalog section and its rows, for the grouped page layout.</summary>

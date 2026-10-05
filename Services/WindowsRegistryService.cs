@@ -19,6 +19,12 @@ public interface IWindowsRegistryService
     bool WriteValue(string keyPath, string? valueName, object? value, RegistryValueKind kind);
     bool DeleteValue(string keyPath, string? valueName);
     bool KeyExists(string keyPath);
+    bool CreateKey(string keyPath);
+    bool DeleteKey(string keyPath);
+    string[] GetSubKeyNames(string keyPath);
+    bool ModifyBinaryBit(string keyPath, string valueName, int byteIndex, byte bitMask, bool setBit);
+    bool ModifyBinaryByte(string keyPath, string valueName, int byteIndex, byte byteValue);
+    bool WriteCompositeString(string keyPath, string valueName, string compositeKey, string? value);
 
     /// <summary>
     /// Applies <paramref name="values"/> to every network interface that has an
@@ -121,6 +127,135 @@ public sealed class WindowsRegistryService : IWindowsRegistryService
         {
             return false;
         }
+    }
+
+    public bool CreateKey(string keyPath)
+    {
+        try
+        {
+            using var key = RegistryKey.OpenBaseKey(ResolveHive(keyPath), RegistryView.Registry64)
+                                   .CreateSubKey(SubKeyPath(keyPath), true);
+            return key != null;
+        }
+        catch (Exception ex) when (ex is SecurityException or UnauthorizedAccessException
+                                       or System.IO.IOException or ArgumentException)
+        {
+            return false;
+        }
+    }
+
+    public bool DeleteKey(string keyPath)
+    {
+        try
+        {
+            if (!KeyExists(keyPath)) return true;
+            using var key = RegistryKey.OpenBaseKey(ResolveHive(keyPath), RegistryView.Registry64)
+                                   .OpenSubKey(SubKeyPath(keyPath), true);
+            if (key == null) return false;
+            key.DeleteSubKeyTree(string.Empty, false);
+            return true;
+        }
+        catch (Exception ex) when (ex is SecurityException or UnauthorizedAccessException
+                                       or System.IO.IOException or ArgumentException)
+        {
+            return false;
+        }
+    }
+
+    public string[] GetSubKeyNames(string keyPath)
+    {
+        try
+        {
+            using var key = RegistryKey.OpenBaseKey(ResolveHive(keyPath), RegistryView.Registry64)
+                                   .OpenSubKey(SubKeyPath(keyPath));
+            return key?.GetSubKeyNames() ?? Array.Empty<string>();
+        }
+        catch { return Array.Empty<string>(); }
+    }
+
+    public bool ModifyBinaryBit(string keyPath, string valueName, int byteIndex, byte bitMask, bool setBit)
+    {
+        try
+        {
+            using var key = RegistryKey.OpenBaseKey(ResolveHive(keyPath), RegistryView.Registry64)
+                                   .CreateSubKey(SubKeyPath(keyPath), true);
+            if (key == null) return false;
+            var data = key.GetValue(valueName) as byte[] ?? Array.Empty<byte>();
+            if (byteIndex >= data.Length)
+                Array.Resize(ref data, byteIndex + 1);
+            if (setBit) data[byteIndex] |= bitMask;
+            else        data[byteIndex] = (byte)(data[byteIndex] & ~bitMask);
+            key.SetValue(valueName, data, RegistryValueKind.Binary);
+            return true;
+        }
+        catch (Exception ex) when (ex is SecurityException or UnauthorizedAccessException
+                                       or System.IO.IOException or ArgumentException)
+        {
+            return false;
+        }
+    }
+
+    public bool ModifyBinaryByte(string keyPath, string valueName, int byteIndex, byte byteValue)
+    {
+        try
+        {
+            using var key = RegistryKey.OpenBaseKey(ResolveHive(keyPath), RegistryView.Registry64)
+                                   .CreateSubKey(SubKeyPath(keyPath), true);
+            if (key == null) return false;
+            var data = key.GetValue(valueName) as byte[] ?? Array.Empty<byte>();
+            if (byteIndex >= data.Length)
+                Array.Resize(ref data, byteIndex + 1);
+            data[byteIndex] = byteValue;
+            key.SetValue(valueName, data, RegistryValueKind.Binary);
+            return true;
+        }
+        catch (Exception ex) when (ex is SecurityException or UnauthorizedAccessException
+                                       or System.IO.IOException or ArgumentException)
+        {
+            return false;
+        }
+    }
+
+    public bool WriteCompositeString(string keyPath, string valueName, string compositeKey, string? value)
+    {
+        try
+        {
+            using var key = RegistryKey.OpenBaseKey(ResolveHive(keyPath), RegistryView.Registry64)
+                                   .CreateSubKey(SubKeyPath(keyPath), true);
+            if (key == null) return false;
+
+            var current = key.GetValue(valueName) as string ?? "";
+            var pairs = ParseCompositeString(current);
+            if (value != null) pairs[compositeKey] = value;
+            else pairs.Remove(compositeKey);
+            var merged = BuildCompositeString(pairs);
+
+            key.SetValue(valueName, merged, RegistryValueKind.String);
+            return true;
+        }
+        catch (Exception ex) when (ex is SecurityException or UnauthorizedAccessException
+                                       or System.IO.IOException or ArgumentException)
+        {
+            return false;
+        }
+    }
+
+    private static Dictionary<string, string> ParseCompositeString(string value)
+    {
+        var pairs = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        if (string.IsNullOrEmpty(value)) return pairs;
+        foreach (var entry in value.Split(';', StringSplitOptions.RemoveEmptyEntries))
+        {
+            var eq = entry.IndexOf('=');
+            if (eq > 0) pairs[entry[..eq]] = entry[(eq + 1)..];
+        }
+        return pairs;
+    }
+
+    private static string BuildCompositeString(Dictionary<string, string> pairs)
+    {
+        if (pairs.Count == 0) return "";
+        return string.Join(";", pairs.Select(p => $"{p.Key}={p.Value}")) + ";";
     }
 
     public int WritePerNetworkInterface(string keyPathTemplate, string? valueName,
