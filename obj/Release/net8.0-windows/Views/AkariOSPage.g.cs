@@ -59,7 +59,7 @@ namespace AkariOSCompanion.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/AkariOSCompanion;V2.0.0.0;component/views/akariospage.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/AkariOSCompanion;component/views/akariospage.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Views\AkariOSPage.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
