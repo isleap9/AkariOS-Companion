@@ -3,12 +3,16 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:vm="clr-namespace:AkariOSCompanion.ViewModels"
     Title="Windows Updates"
-    Background="Transparent">
+    Background="Transparent"
+    d:DataContext="{d:DesignInstance Type=vm:UpdateViewModel}"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
 
     <Page.Resources>
-        <!-- Compact toggle row: title + description left, control right -->
-        <Style x:Key="GamingRow" TargetType="Border">
+        <Style x:Key="UpdateRow" TargetType="Border">
             <Setter Property="BorderBrush" Value="{StaticResource AkariBorderSoft}" />
             <Setter Property="BorderThickness" Value="0,1,0,0" />
             <Setter Property="Padding" Value="18,12" />
@@ -25,223 +29,64 @@
                        Foreground="{StaticResource AkariText}" />
             <TextBlock Text="Update policy, delivery optimisation, and update behaviour controls."
                        FontSize="13" Style="{StaticResource Caption}"
-                       Margin="0,5,0,0" />
+                       Margin="0,5,0,20" />
 
-            <!-- ══ Update Policy ══ -->
-            <Border Style="{StaticResource AkariCardBorder}" Margin="0,20,0,0">
-                <StackPanel>
-                    <TextBlock Text="Update Policy" Style="{StaticResource SectionHeader}"
-                               Margin="18,15,18,10" />
-                    <Border Style="{StaticResource GamingRow}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
-                                <TextBlock Text="Windows Update Policy" FontSize="13.5" FontWeight="SemiBold"
-                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
-                                <TextBlock Text="Control how Windows updates are installed on your system" FontSize="12"
-                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
-                            </StackPanel>
-                            <ComboBox Grid.Column="1" Width="210" VerticalAlignment="Center"
-                                      SelectedIndex="0">
-                                <ComboBoxItem Content="Normal (Windows Default)" />
-                                <ComboBoxItem Content="Security Updates Only (Recommended)" />
-                                <ComboBoxItem Content="Paused for a long time (Unpause in Settings)" />
-                                <ComboBoxItem Content="Disabled (NOT Recommended, Security Risk)" />
-                            </ComboBox>
-                        </Grid>
-                    </Border>
-                </StackPanel>
-            </Border>
+            <!-- Live settings, grouped by catalog section -->
+            <ItemsControl ItemsSource="{Binding Sections}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Style="{StaticResource AkariCardBorder}" Margin="0,0,0,16">
+                            <StackPanel>
+                                <TextBlock Text="{Binding Title}" Style="{StaticResource SectionHeader}"
+                                           Margin="18,15,18,10" />
+                                <ItemsControl ItemsSource="{Binding Items}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Style="{StaticResource UpdateRow}">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                                        <TextBlock Text="{Binding Name}"
+                                                                   FontSize="13.5" FontWeight="SemiBold"
+                                                                   Foreground="{StaticResource AkariText}"
+                                                                   TextWrapping="Wrap" />
+                                                        <TextBlock Text="{Binding Description}" FontSize="12"
+                                                                   Style="{StaticResource Caption}"
+                                                                   Margin="0,2,0,0" TextWrapping="Wrap" />
+                                                        <TextBlock Text="{Binding Status}" FontSize="11"
+                                                                   Foreground="{StaticResource AkariFaint}"
+                                                                   Margin="0,3,0,0" TextWrapping="Wrap"
+                                                                   Visibility="{Binding Status, Converter={StaticResource NullToVis}}" />
+                                                    </StackPanel>
 
-            <!-- ══ Delivery &amp; Store ══ -->
-            <Border Style="{StaticResource AkariCardBorder}" Margin="0,20,0,0">
-                <StackPanel>
-                    <TextBlock Text="Delivery &amp; Store" Style="{StaticResource SectionHeader}"
-                               Margin="18,15,18,10" />
-                    <Border Style="{StaticResource GamingRow}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
-                                <TextBlock Text="Delivery Optimization" FontSize="13.5" FontWeight="SemiBold"
-                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
-                                <TextBlock Text="Share downloaded updates with other PCs on your network or the internet to reduce bandwidth usage" FontSize="12"
-                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
-                            </StackPanel>
-                            <ComboBox Grid.Column="1" Width="210" VerticalAlignment="Center"
-                                      SelectedIndex="0">
-                                <ComboBoxItem Content="Windows Default" />
-                                <ComboBoxItem Content="Devices on LAN Only" />
-                                <ComboBoxItem Content="Devices on LAN and Internet" />
-                                <ComboBoxItem Content="Disabled" />
-                            </ComboBox>
-                        </Grid>
-                    </Border>
-                    <Border Style="{StaticResource GamingRow}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
-                                <TextBlock Text="Microsoft Store Auto-Downloads" FontSize="13.5" FontWeight="SemiBold"
-                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
-                                <TextBlock Text="Automatically downloads app updates from the Microsoft Store in the background." FontSize="12"
-                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
-                            </StackPanel>
-                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
-                        </Grid>
-                    </Border>
-                </StackPanel>
-            </Border>
+                                                    <!-- Dropdown for Selection settings (policy mode, delivery optimisation) -->
+                                                    <ComboBox Grid.Column="1" Width="230"
+                                                              VerticalAlignment="Center"
+                                                              IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}"
+                                                              ItemsSource="{Binding Options}"
+                                                              SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"
+                                                              DisplayMemberPath="DisplayName"
+                                                              Visibility="{Binding IsSelection, Converter={StaticResource BoolToVis}}" />
 
-            <!-- ══ Update Behavior ══ -->
-            <Border Style="{StaticResource AkariCardBorder}" Margin="0,20,0,0">
-                <StackPanel>
-                    <TextBlock Text="Update Behavior" Style="{StaticResource SectionHeader}"
-                               Margin="18,15,18,10" />
-                    <Border Style="{StaticResource GamingRow}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
-                                <TextBlock Text="Get Latest Updates" FontSize="13.5" FontWeight="SemiBold"
-                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
-                                <TextBlock Text="Receives the latest updates as soon as they are available, before the standard rollout." FontSize="12"
-                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                                                    <!-- Switch for Toggle settings -->
+                                                    <ui:ToggleSwitch Grid.Column="1"
+                                                                     VerticalAlignment="Center"
+                                                                     IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}"
+                                                                     IsChecked="{Binding IsOn, Mode=TwoWay}"
+                                                                     Visibility="{Binding IsSelection, Converter={StaticResource BoolToVis}, ConverterParameter=invert}" />
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
                             </StackPanel>
-                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
-                        </Grid>
-                    </Border>
-                    <Border Style="{StaticResource GamingRow}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
-                                <TextBlock Text="Updates for Other Microsoft Products" FontSize="13.5" FontWeight="SemiBold"
-                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
-                                <TextBlock Text="Receives updates for other Microsoft products alongside Windows Update." FontSize="12"
-                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
-                            </StackPanel>
-                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
-                        </Grid>
-                    </Border>
-                    <Border Style="{StaticResource GamingRow}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
-                                <TextBlock Text="Restart as Soon as Possible" FontSize="13.5" FontWeight="SemiBold"
-                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
-                                <TextBlock Text="Restarts the device as soon as possible to finish installing updates, even during active hours." FontSize="12"
-                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
-                            </StackPanel>
-                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
-                        </Grid>
-                    </Border>
-                    <Border Style="{StaticResource GamingRow}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
-                                <TextBlock Text="Managed Restart Options" FontSize="13.5" FontWeight="SemiBold"
-                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
-                                <TextBlock Text="Allows users to configure restart options for Windows Update." FontSize="12"
-                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
-                            </StackPanel>
-                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
-                        </Grid>
-                    </Border>
-                    <Border Style="{StaticResource GamingRow}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
-                                <TextBlock Text="Update Notifications" FontSize="13.5" FontWeight="SemiBold"
-                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
-                                <TextBlock Text="Shows notifications about Windows Update activity including restart prompts." FontSize="12"
-                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
-                            </StackPanel>
-                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
-                        </Grid>
-                    </Border>
-                    <Border Style="{StaticResource GamingRow}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
-                                <TextBlock Text="Restart Notification" FontSize="13.5" FontWeight="SemiBold"
-                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
-                                <TextBlock Text="Shows a notification before restarting to complete update installation." FontSize="12"
-                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
-                            </StackPanel>
-                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
-                        </Grid>
-                    </Border>
-                    <Border Style="{StaticResource GamingRow}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
-                                <TextBlock Text="Updates on Metered Connections" FontSize="13.5" FontWeight="SemiBold"
-                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
-                                <TextBlock Text="Allows Windows Update to download updates on metered network connections." FontSize="12"
-                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
-                            </StackPanel>
-                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
-                        </Grid>
-                    </Border>
-                    <Border Style="{StaticResource GamingRow}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
-                                <TextBlock Text="Driver Update Controls" FontSize="13.5" FontWeight="SemiBold"
-                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
-                                <TextBlock Text="Allows Windows to automatically download and install driver updates through Windows Update." FontSize="12"
-                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
-                            </StackPanel>
-                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
-                        </Grid>
-                    </Border>
-                    <Border Style="{StaticResource GamingRow}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
-                                <TextBlock Text="Driver Co-installers" FontSize="13.5" FontWeight="SemiBold"
-                                           Foreground="{StaticResource AkariText}" TextWrapping="Wrap" />
-                                <TextBlock Text="Allows Windows to install driver co-installers and extension INFs from Windows Update." FontSize="12"
-                                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
-                            </StackPanel>
-                            <ui:ToggleSwitch Grid.Column="1" VerticalAlignment="Center" />
-                        </Grid>
-                    </Border>
-                </StackPanel>
-            </Border>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
         </StackPanel>
     </ScrollViewer>

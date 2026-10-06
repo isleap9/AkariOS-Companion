@@ -82,9 +82,18 @@ public sealed class SettingOperationExecutor : ISettingOperationExecutor
 
         foreach (var rs in setting.RegistrySettings)
         {
-            if (ApplyRegistrySetting(rs, enabled, failures, appliedWrites, ref applied))
-                continue;
-            // If ApplyRegistrySetting returned false, the failure was already recorded.
+            // One chokepoint, ported verbatim from the old project. Every special case
+            // (per-NIC, per-monitor, key-existence, composite, binary) lives inside it.
+            if (_registry.ApplySetting(rs, enabled))
+            {
+                applied++;
+                appliedWrites.Add(Describe(rs, enabled, null));
+            }
+            else
+            {
+                failures.Add($"{rs.KeyPath}\\{rs.ValueName}");
+                _log?.Invoke($"[FAIL] {rs.KeyPath}\\{rs.ValueName}");
+            }
         }
 
         foreach (var task in setting.ScheduledTaskSettings)
@@ -114,112 +123,6 @@ public sealed class SettingOperationExecutor : ISettingOperationExecutor
         return result;
     }
 
-    /// <summary>
-    /// Applies one registry setting, handling all special cases (key-existence,
-    /// composite strings, binary bit-masks, binary byte-only, per-monitor).
-    /// Returns true on success, false on failure (failure is recorded in the list).
-    /// </summary>
-    private bool ApplyRegistrySetting(RegistrySetting rs, bool enabled,
-                                      List<string> failures, List<string> appliedWrites, ref int applied)
-    {
-        // Key-existence toggle (ValueName == null)
-        if (rs.ValueName == null)
-        {
-            var ok = enabled ? _registry.CreateKey(rs.KeyPath) : _registry.DeleteKey(rs.KeyPath);
-            if (ok)
-            {
-                applied++;
-                appliedWrites.Add($"{rs.KeyPath} (key {(enabled ? "created" : "deleted")})");
-            }
-            else failures.Add($"{rs.KeyPath} (key)");
-            return ok;
-        }
-
-        // Composite REG_SZ
-        if (rs.CompositeStringKey is not null)
-        {
-            var target = enabled ? FirstNonNull(rs.EnabledValue)?.ToString()
-                                 : FirstNonNull(rs.DisabledValue)?.ToString();
-            var ok = _registry.WriteCompositeString(rs.KeyPath, rs.ValueName, rs.CompositeStringKey, target);
-            if (ok)
-            {
-                applied++;
-                appliedWrites.Add($"{rs.KeyPath}\\{rs.ValueName} [{rs.CompositeStringKey}] = {target ?? "(removed)"}");
-            }
-            else failures.Add($"{rs.KeyPath}\\{rs.ValueName}");
-            return ok;
-        }
-
-        // REG_BINARY bit-mask
-        if (rs.BitMask.HasValue && rs.BinaryByteIndex.HasValue)
-        {
-            var ok = _registry.ModifyBinaryBit(rs.KeyPath, rs.ValueName,
-                rs.BinaryByteIndex.Value, rs.BitMask.Value, enabled);
-            if (ok)
-            {
-                applied++;
-                appliedWrites.Add($"{rs.KeyPath}\\{rs.ValueName} bit[{rs.BinaryByteIndex}] {(enabled ? "set" : "clear")}");
-            }
-            else failures.Add($"{rs.KeyPath}\\{rs.ValueName}");
-            return ok;
-        }
-
-        // REG_BINARY byte-only
-        if (rs.ModifyByteOnly && rs.BinaryByteIndex.HasValue)
-        {
-            var byteValue = enabled ? FirstNonNull(rs.EnabledValue) switch
-            {
-                byte b => b,
-                int i => (byte)i,
-                _ => (byte)0
-            } : FirstNonNull(rs.DisabledValue) switch
-            {
-                byte b => b,
-                int i => (byte)i,
-                _ => (byte)0
-            };
-            var ok = _registry.ModifyBinaryByte(rs.KeyPath, rs.ValueName,
-                rs.BinaryByteIndex.Value, byteValue);
-            if (ok)
-            {
-                applied++;
-                appliedWrites.Add($"{rs.KeyPath}\\{rs.ValueName} byte[{rs.BinaryByteIndex}] = 0x{byteValue:X2}");
-            }
-            else failures.Add($"{rs.KeyPath}\\{rs.ValueName}");
-            return ok;
-        }
-
-        // Per-monitor expansion
-        if (rs.ApplyPerMonitor)
-        {
-            var subKeys = _registry.GetSubKeyNames(rs.KeyPath);
-            if (subKeys.Length == 0)
-            {
-                failures.Add($"{rs.KeyPath} (no subkeys)");
-                return false;
-            }
-            var allOk = true;
-            foreach (var subKey in subKeys)
-            {
-                var expanded = rs with { KeyPath = $@"{rs.KeyPath}\{subKey}", ApplyPerMonitor = false };
-                if (!ApplyRegistrySetting(expanded, enabled, failures, appliedWrites, ref applied))
-                    allOk = false;
-            }
-            return allOk;
-        }
-
-        // Standard value write / delete
-        var targetValue = ResolveTarget(rs, enabled);
-        var ok2 = _registry.WriteValue(rs.KeyPath, rs.ValueName, targetValue, rs.ValueType);
-        if (ok2)
-        {
-            applied++;
-            appliedWrites.Add($"{rs.KeyPath}\\{rs.ValueName} = {targetValue ?? "(value removed)"}");
-        }
-        else failures.Add($"{rs.KeyPath}\\{rs.ValueName}");
-        return ok2;
-    }
-
     private void LogOutcome(SettingDefinition setting, bool enabled, OperationResult result,
                             string? detail = null)
     {
@@ -241,32 +144,6 @@ public sealed class SettingOperationExecutor : ISettingOperationExecutor
         if (result.RequiresRestart is not null)
             _log($"[RESTART] {setting.Name}: {result.RequiresRestart}");
     }
-
-    /// <summary>
-    /// The value that realises <paramref name="enabled"/> for one backing registry
-    /// setting, or null to delete the value.
-    ///
-    /// Ported from the old project's WindowsRegistryService.ApplySettingCore:
-    ///   valueToSet = specificValue ?? (isEnabled
-    ///                  ? GetWriteValue(EnabledValue)
-    ///                  : GetWriteValue(DisabledValue))
-    ///
-    /// The value arrays are the ONLY input. RecommendedValue / DefaultValue /
-    /// RecommendedToggleState describe the *badge* ("Recommended", "Default") shown
-    /// in the UI, not the write path — consulting them here inverted every setting
-    /// whose recommended state happens to be "off" (VBS, Game DVR, and others).
-    /// </summary>
-    private static object? ResolveTarget(RegistrySetting rs, bool enabled)
-    {
-        var target = enabled ? FirstNonNull(rs.EnabledValue)
-                             : FirstNonNull(rs.DisabledValue);
-
-        // Null means "remove the value" — a legitimate outcome, e.g. Alt+Tab's
-        // EnabledValue { 3, null } where 3 is written and null is never reached.
-        return target;
-    }
-
-    private static object? FirstNonNull(object?[]? values) => values?.FirstOrDefault(v => v is not null);
 
     public OperationResult ApplySelection(SettingDefinition setting, int optionIndex)
     {
@@ -291,25 +168,42 @@ public sealed class SettingOperationExecutor : ISettingOperationExecutor
         {
             foreach (var (valueName, value) in option.ValueMappings)
             {
-                var kind = setting.RegistrySettings
-                    .FirstOrDefault(r => r.ValueName == valueName)?.ValueType
-                    ?? InferKind(value);
-                var targetRs = setting.RegistrySettings.FirstOrDefault(r => r.ValueName == valueName) ?? rs;
-                if (Write(targetRs, valueName, value, kind))
+                // Every entry that owns this value name gets written. Delivery
+                // Optimization declares DODownloadMode under both HKCU and HKLM policy
+                // keys and Windows only honours HKLM, so writing a single match left the
+                // dropdown looking applied while the machine ignored it.
+                var targets = setting.RegistrySettings
+                                 .Where(r => r.ValueName == valueName)
+                                 .ToList();
+
+                if (targets.Count == 0)
                 {
-                    applied++;
-                    appliedWrites.Add($"{targetRs.KeyPath}\\{valueName} = "
-                                    + $"{value ?? "(value removed)"}");
+                    // Option names a value the catalog didn't declare — write it under
+                    // the primary entry so the mapping is not silently dropped.
+                    targets.Add(rs with { ValueName = valueName });
                 }
-                else failures.Add($"{targetRs.KeyPath}\\{valueName}");
+
+                foreach (var targetRs in targets)
+                {
+                    if (_registry.ApplySetting(targetRs, enable: true, specificValue: value))
+                    {
+                        applied++;
+                        appliedWrites.Add(Describe(targetRs, true, value));
+                    }
+                    else
+                    {
+                        failures.Add($"{targetRs.KeyPath}\\{valueName}");
+                        _log?.Invoke($"[FAIL] {targetRs.KeyPath}\\{valueName} = {value ?? "(absent)"}");
+                    }
+                }
             }
         }
         else if (option.SimpleValue is not null)
         {
-            if (Write(rs, rs.ValueName, option.SimpleValue, rs.ValueType))
+            if (_registry.ApplySetting(rs, enable: true, specificValue: option.SimpleValue))
             {
                 applied++;
-                appliedWrites.Add($"{rs.KeyPath}\\{rs.ValueName} = {option.SimpleValue}");
+                appliedWrites.Add(Describe(rs, true, option.SimpleValue));
             }
             else failures.Add($"{rs.KeyPath}\\{rs.ValueName}");
         }
@@ -321,16 +215,25 @@ public sealed class SettingOperationExecutor : ISettingOperationExecutor
         return result;
     }
 
-    // ── Write helpers ────────────────────────────────────────────────────────
+    // ── Helpers ───────────────────────────────────────────────────────────────
 
-    private bool Write(RegistrySetting rs, string? valueName, object? value, RegistryValueKind kind)
+    /// <summary>
+    /// Human-readable log line for one applied write. Mirrors what ApplySettingCore
+    /// actually did (delete-on-null, bit edit, composite sub-key, per-location fan-out).
+    /// </summary>
+    private static string Describe(RegistrySetting rs, bool enabled, object? value)
     {
-        var ok = rs.ApplyPerNetworkInterface
-            ? _registry.WritePerNetworkInterface(rs.KeyPath, valueName, value, kind) > 0
-            : _registry.WriteValue(rs.KeyPath, valueName, value, kind);
+        if (rs.ValueName == null)
+            return $"{rs.KeyPath} (key {(enabled ? "created" : "deleted")})";
 
-        if (!ok) _log?.Invoke($"[FAIL] {rs.KeyPath}\\{valueName} = {value ?? "(absent)"}");
-        return ok;
+        var where = $"{rs.KeyPath}\\{rs.ValueName}";
+        if (rs.CompositeStringKey is not null)
+            return $"{where} [{rs.CompositeStringKey}] = {value ?? "(removed)"}";
+        if (rs.BitMask.HasValue && rs.BinaryByteIndex.HasValue)
+            return $"{where} bit[{rs.BinaryByteIndex}] {(enabled ? "set" : "clear")}";
+        if (rs.ApplyPerNetworkInterface || rs.ApplyPerMonitor)
+            return $"{where} = {value ?? "(value removed)"} (per-location expansion)";
+        return $"{where} = {value ?? "(value removed)"}";
     }
 
     private static int IndexOfRecommended(SettingDefinition setting)
@@ -345,107 +248,6 @@ public sealed class SettingOperationExecutor : ISettingOperationExecutor
         var options = setting.ComboBox?.Options ?? Array.Empty<ComboBoxOption>();
         for (var i = 0; i < options.Count; i++) if (options[i].IsDefault) return i;
         return 0;
-    }
-
-    private static RegistryValueKind InferKind(object? value) => value switch
-    {
-        null => RegistryValueKind.String,
-        int or uint or long or short => RegistryValueKind.DWord,
-        byte[] => RegistryValueKind.Binary,
-        _ => RegistryValueKind.String,
-    };
-
-    /// <summary>
-    /// Applies a specific value to a registry setting, handling special cases
-    /// (composite strings, binary bit-masks, binary byte-only, per-monitor).
-    /// Returns true on success, false on failure.
-    /// </summary>
-    private bool ApplyRegistrySettingWithValue(RegistrySetting rs, string valueName,
-        object? value, RegistryValueKind kind,
-        List<string> failures, List<string> appliedWrites, ref int applied)
-    {
-        // Composite REG_SZ
-        if (rs.CompositeStringKey is not null)
-        {
-            var ok = _registry.WriteCompositeString(rs.KeyPath, valueName, rs.CompositeStringKey, value?.ToString());
-            if (ok)
-            {
-                applied++;
-                appliedWrites.Add($"{rs.KeyPath}\\{valueName} [{rs.CompositeStringKey}] = {value ?? "(removed)"}");
-            }
-            else failures.Add($"{rs.KeyPath}\\{valueName}");
-            return ok;
-        }
-
-        // REG_BINARY bit-mask — set or clear based on value
-        if (rs.BitMask.HasValue && rs.BinaryByteIndex.HasValue)
-        {
-            var setBit = value switch
-            {
-                bool b => b,
-                int i => i != 0,
-                byte b => b != 0,
-                _ => true
-            };
-            var ok = _registry.ModifyBinaryBit(rs.KeyPath, valueName,
-                rs.BinaryByteIndex.Value, rs.BitMask.Value, setBit);
-            if (ok)
-            {
-                applied++;
-                appliedWrites.Add($"{rs.KeyPath}\\{valueName} bit[{rs.BinaryByteIndex}] {(setBit ? "set" : "clear")}");
-            }
-            else failures.Add($"{rs.KeyPath}\\{valueName}");
-            return ok;
-        }
-
-        // REG_BINARY byte-only
-        if (rs.ModifyByteOnly && rs.BinaryByteIndex.HasValue)
-        {
-            var byteValue = value switch
-            {
-                byte b => b,
-                int i => (byte)i,
-                _ => (byte)0
-            };
-            var ok = _registry.ModifyBinaryByte(rs.KeyPath, valueName,
-                rs.BinaryByteIndex.Value, byteValue);
-            if (ok)
-            {
-                applied++;
-                appliedWrites.Add($"{rs.KeyPath}\\{valueName} byte[{rs.BinaryByteIndex}] = 0x{byteValue:X2}");
-            }
-            else failures.Add($"{rs.KeyPath}\\{valueName}");
-            return ok;
-        }
-
-        // Per-monitor expansion
-        if (rs.ApplyPerMonitor)
-        {
-            var subKeys = _registry.GetSubKeyNames(rs.KeyPath);
-            if (subKeys.Length == 0)
-            {
-                failures.Add($"{rs.KeyPath} (no subkeys)");
-                return false;
-            }
-            var allOk = true;
-            foreach (var subKey in subKeys)
-            {
-                var expanded = rs with { KeyPath = $@"{rs.KeyPath}\{subKey}", ApplyPerMonitor = false };
-                if (!ApplyRegistrySettingWithValue(expanded, valueName, value, kind, failures, appliedWrites, ref applied))
-                    allOk = false;
-            }
-            return allOk;
-        }
-
-        // Standard value write / delete
-        var ok2 = _registry.WriteValue(rs.KeyPath, valueName, value, kind);
-        if (ok2)
-        {
-            applied++;
-            appliedWrites.Add($"{rs.KeyPath}\\{valueName} = {value ?? "(value removed)"}");
-        }
-        else failures.Add($"{rs.KeyPath}\\{valueName}");
-        return ok2;
     }
 
     private static OperationResult Build(List<string> failures, int applied, SettingDefinition setting,

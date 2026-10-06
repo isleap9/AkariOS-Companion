@@ -44,6 +44,27 @@ public sealed class SettingStateReader : ISettingStateReader
             return task is not null && _tasks.IsTaskEnabled(task.TaskPath);
         }
 
+        // A toggle can be mirrored across hives under the same value name — Storage Sense
+        // writes both HKCU and HKLM policy keys. Reads covered only the primary, so a
+        // setting that was disabled in one hive but left on in the other reported ON.
+        // Report ON only when every mirror agrees, which also makes a half-applied state
+        // read as OFF so re-toggling pushes the change back out to all locations.
+        var mirrors = setting.RegistrySettings
+                              .Where(r => r.ValueName == rs.ValueName)
+                              .ToList();
+        if (mirrors.Count > 1)
+        {
+            foreach (var mirror in mirrors)
+                if (!ReadSingleToggle(mirror, setting)) return false;
+            return true;
+        }
+
+        return ReadSingleToggle(rs, setting);
+    }
+
+    /// <summary>Reads one registry setting's on/off state, in isolation.</summary>
+    private bool ReadSingleToggle(RegistrySetting rs, SettingDefinition setting)
+    {
         if (!_registry.TryOpenSubKey(rs.KeyPath, out var key) || key is null)
             return false;
 
@@ -79,9 +100,12 @@ public sealed class SettingStateReader : ISettingStateReader
             if (current is byte[] blob && rs.BinaryByteIndex is int idx && rs.BitMask is byte mask)
                 return BlobBitIsSet(blob, idx, mask);
 
-            // Composite REG_SZ: compare only the sub-key this setting owns.
+            // Composite REG_SZ: extract the owned sub-key and compare against
+            // EnabledValue; when absent, fall back to DefaultValue. Ported from the
+            // old project's ResolveCompositeState — the write side merges
+            // "key=value;" pairs, so the read must split on '=' (not ':').
             if (rs.CompositeStringKey is not null)
-                return CompositeContains(current, rs.CompositeStringKey);
+                return ResolveCompositeState(rs, setting, current);
 
             return ValueEquals(current, rs.EnabledValue?.FirstOrDefault());
         }
@@ -100,16 +124,31 @@ public sealed class SettingStateReader : ISettingStateReader
         var rs = PrimaryRegistrySetting(setting);
         if (rs == null) return -1;
 
-        var live = _registry.ReadValue(rs.KeyPath, rs.ValueName);
+        // A dropdown can be backed by the same value name under several hives. Delivery
+        // Optimization declares DODownloadMode in both HKCU and HKLM policy keys and
+        // Windows honours the HKLM one, so probe them in order and take the first value
+        // that is actually present — reading only the primary would report a stale HKCU
+        // value (or "default") while the machine was really running something else.
+        var candidates = new List<RegistrySetting> { rs };
+        candidates.AddRange(setting.RegistrySettings
+                                .Where(r => r.ValueName == rs.ValueName && !ReferenceEquals(r, rs)));
 
-        // No value present at all: the default option is what Windows is doing.
-        if (live == null)
+        object? live = null;
+        RegistrySetting? liveFrom = null;
+        foreach (var candidate in candidates)
+        {
+            var v = _registry.ReadValue(candidate.KeyPath, candidate.ValueName);
+            if (v is not null) { live = v; liveFrom = candidate; break; }
+        }
+
+        // No value present anywhere: the default option is what Windows is doing.
+        if (live is null || liveFrom is null)
             return setting.ResolveUnmatchedToDefault
                 ? IndexOfDefault(options)
                 : FirstIndexWhereAllValuesAbsent(options, rs);
 
         for (var i = 0; i < options.Count; i++)
-            if (OptionMatches(options[i], rs, live))
+            if (OptionMatches(options[i], liveFrom, live))
                 return i;
 
         // Unrecognised live value.
@@ -253,22 +292,34 @@ public sealed class SettingStateReader : ISettingStateReader
         v is int or uint or long or ulong or short or ushort or byte or sbyte or double or float or decimal;
 
     private static bool BlobBitIsSet(byte[] blob, int index, byte mask) =>
-        index >= 0 && index < blob.Length && (blob[index] & mask) == mask;
+        index >= 0 && index < blob.Length && (blob[index] & mask) != 0;
 
     /// <summary>
-    /// Composite REG_SZ values pack several flags into one string, each with its own
-    /// sub-key and value ("subkey:value;"). Only the pair we own decides the state.
+    /// Composite REG_SZ values pack several flags into one string as "key=value;"
+    /// pairs. Only the pair this setting owns decides the state: present → compare
+    /// against EnabledValue; absent → compare DefaultValue against EnabledValue.
     /// </summary>
-    private static bool CompositeContains(object? raw, string ownedKey)
+    private static bool ResolveCompositeState(RegistrySetting rs, SettingDefinition setting, object? raw)
     {
-        if (raw is not string s) return false;
-        foreach (var pair in s.Split(';', StringSplitOptions.RemoveEmptyEntries))
+        var pairs = ParseCompositeString(raw?.ToString() ?? "");
+        var enabledStr = rs.EnabledValue?.FirstOrDefault(v => v is not null)?.ToString();
+        if (pairs.TryGetValue(rs.CompositeStringKey!, out var subValue))
+            return string.Equals(subValue, enabledStr, StringComparison.OrdinalIgnoreCase);
+
+        return string.Equals(rs.DefaultValue?.ToString(),
+            enabledStr, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static Dictionary<string, string> ParseCompositeString(string value)
+    {
+        var pairs = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        if (string.IsNullOrEmpty(value)) return pairs;
+        foreach (var entry in value.Split(';', StringSplitOptions.RemoveEmptyEntries))
         {
-            var kv = pair.Split(':', 2);
-            if (kv.Length == 2 && kv[0].Trim().Equals(ownedKey, StringComparison.OrdinalIgnoreCase))
-                return kv[1].Trim() is "1" or "true" or "enabled";
+            var eq = entry.IndexOf('=');
+            if (eq > 0) pairs[entry[..eq].Trim()] = entry[(eq + 1)..].Trim();
         }
-        return false;
+        return pairs;
     }
 
     internal static string Format(object? v) => v switch

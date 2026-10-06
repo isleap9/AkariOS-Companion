@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Security;
+using AkariOSCompanion.Models;
 using Microsoft.Win32;
 
 namespace AkariOSCompanion.Services;
@@ -27,11 +27,16 @@ public interface IWindowsRegistryService
     bool WriteCompositeString(string keyPath, string valueName, string compositeKey, string? value);
 
     /// <summary>
-    /// Applies <paramref name="values"/> to every network interface that has an
-    /// adapter-specific sub-key, used by the DNS settings.
+    /// Applies a whole <see cref="RegistrySetting"/> — every special case (per-NIC,
+    /// per-monitor, key-existence, composite string, binary bit/byte) is handled
+    /// inside. This is the single write chokepoint, ported verbatim from the old
+    /// project's WindowsRegistryService.ApplySettingCore.
     /// </summary>
-    int WritePerNetworkInterface(string keyPathTemplate, string? valueName,
-                                  object? value, RegistryValueKind kind);
+    /// <param name="specificValue">
+    /// When non-null this exact value is written instead of resolving from
+    /// Enabled/DisabledValue. Used by dropdown options.
+    /// </param>
+    bool ApplySetting(RegistrySetting setting, bool enable, object? specificValue = null);
 }
 
 public sealed class WindowsRegistryService : IWindowsRegistryService
@@ -144,15 +149,39 @@ public sealed class WindowsRegistryService : IWindowsRegistryService
         }
     }
 
+    private const int MinDeleteDepth = 2;
+    private static readonly HashSet<string> ProtectedSubKeyRoots = new(StringComparer.OrdinalIgnoreCase)
+    {
+        @"SOFTWARE\Microsoft\Windows",
+        @"SOFTWARE\Microsoft\Windows NT",
+        @"SOFTWARE\Policies",
+        @"SYSTEM\CurrentControlSet",
+        @"SYSTEM\CurrentControlSet\Services",
+    };
+
     public bool DeleteKey(string keyPath)
     {
         try
         {
             if (!KeyExists(keyPath)) return true;
-            using var key = RegistryKey.OpenBaseKey(ResolveHive(keyPath), RegistryView.Registry64)
-                                   .OpenSubKey(SubKeyPath(keyPath), true);
-            if (key == null) return false;
-            key.DeleteSubKeyTree(string.Empty, false);
+            var hive = ResolveHive(keyPath);
+            var subKeyPath = SubKeyPath(keyPath);
+            var segments = subKeyPath.Split('\\', StringSplitOptions.RemoveEmptyEntries);
+            if (segments.Length < MinDeleteDepth)
+            {
+                Log($"[REGISTRY] Refusing to delete shallow key '{keyPath}'");
+                return false;
+            }
+            foreach (var protectedRoot in ProtectedSubKeyRoots)
+            {
+                if (subKeyPath.Equals(protectedRoot, StringComparison.OrdinalIgnoreCase))
+                {
+                    Log($"[REGISTRY] Refusing to delete protected key '{keyPath}'");
+                    return false;
+                }
+            }
+            RegistryKey.OpenBaseKey(hive, RegistryView.Registry64)
+                       .DeleteSubKeyTree(subKeyPath, false);
             return true;
         }
         catch (Exception ex) when (ex is SecurityException or UnauthorizedAccessException
@@ -258,22 +287,159 @@ public sealed class WindowsRegistryService : IWindowsRegistryService
         return string.Join(";", pairs.Select(p => $"{p.Key}={p.Value}")) + ";";
     }
 
-    public int WritePerNetworkInterface(string keyPathTemplate, string? valueName,
-                                        object? value, RegistryValueKind kind)
-    {
-        // Templates look like: ...\Tcpip\Parameters\Interfaces\{iface}
-        var written = 0;
-        foreach (var iface in NetworkInterface.GetAllNetworkInterfaces())
-        {
-            if (iface.NetworkInterfaceType == NetworkInterfaceType.Loopback) continue;
+    // ── Single write chokepoint ───────────────────────────────────────────────
+    // Ported verbatim from the old project's WindowsRegistryService.ApplySettingCore.
+    // Do NOT split this up: per-NIC / per-monitor expansion, composite-string merge
+    // and binary bit/byte edits all share this one recursive path, which is why the
+    // old project needed no per-setting special cases at the executor level.
 
-            // Registry sub-keys are keyed by the adapter interface GUID, not the MAC.
-            var guid = iface.Id;
-            var path = keyPathTemplate.Replace("{iface}", guid);
-            if (WriteValue(path, valueName, value, kind)) written++;
+    public bool ApplySetting(RegistrySetting setting, bool enable, object? specificValue = null)
+        => ApplySettingCore(setting, enable, specificValue, useDefaultValue: false);
+
+    private bool ApplySettingCore(RegistrySetting setting, bool isEnabled,
+                                  object? specificValue, bool useDefaultValue)
+    {
+        if (setting == null) return false;
+
+        try
+        {
+            // ── Per-network-interface expansion ──
+            // The path points at the Interfaces container and each adapter is a sub-key
+            // named by its GUID, so expand over the registry's own sub-keys.
+            if (setting.ApplyPerNetworkInterface)
+            {
+                var subKeys = GetSubKeyNames(setting.KeyPath);
+                if (subKeys.Length == 0)
+                {
+                    Log($"[REGISTRY] No subkeys under '{setting.KeyPath}' for per-interface setting");
+                    return false;
+                }
+                var allSucceeded = true;
+                foreach (var subKey in subKeys)
+                {
+                    var expanded = setting with
+                    {
+                        KeyPath = $@"{setting.KeyPath}\{subKey}",
+                        ApplyPerNetworkInterface = false
+                    };
+                    if (!ApplySettingCore(expanded, isEnabled, specificValue, useDefaultValue))
+                        allSucceeded = false;
+                }
+                return allSucceeded;
+            }
+
+            // ── Per-monitor expansion ──
+            if (setting.ApplyPerMonitor)
+            {
+                var subKeys = GetSubKeyNames(setting.KeyPath);
+                if (subKeys.Length == 0)
+                {
+                    Log($"[REGISTRY] No subkeys under '{setting.KeyPath}' for per-monitor setting");
+                    return false;
+                }
+                var allSucceeded = true;
+                foreach (var subKey in subKeys)
+                {
+                    var expanded = setting with
+                    {
+                        KeyPath = $@"{setting.KeyPath}\{subKey}",
+                        ApplyPerMonitor = false
+                    };
+                    if (!ApplySettingCore(expanded, isEnabled, specificValue, useDefaultValue))
+                        allSucceeded = false;
+                }
+                return allSucceeded;
+            }
+
+            Log($"[REGISTRY] Applying: {setting.KeyPath}\\{setting.ValueName} enable={isEnabled}");
+
+            // ── Key-existence toggle (ValueName == null) ──
+            if (setting.ValueName == null)
+                return isEnabled ? CreateKey(setting.KeyPath) : DeleteKey(setting.KeyPath);
+
+            // ── Composite REG_SZ (e.g. DirectXUserGlobalSettings) ──
+            if (setting.CompositeStringKey != null)
+            {
+                if (!CreateKey(setting.KeyPath)) return false;
+                var current = ValueExists(setting.KeyPath, setting.ValueName)
+                    ? (ReadValue(setting.KeyPath, setting.ValueName)?.ToString() ?? "")
+                    : "";
+                var pairs = ParseCompositeString(current);
+                var subValue = specificValue?.ToString()
+                    ?? (isEnabled ? GetWriteValue(setting.EnabledValue)?.ToString()
+                                  : GetWriteValue(setting.DisabledValue)?.ToString());
+                if (subValue != null) pairs[setting.CompositeStringKey] = subValue;
+                else pairs.Remove(setting.CompositeStringKey);
+                var merged = BuildCompositeString(pairs);
+                return WriteValue(setting.KeyPath, setting.ValueName, merged, RegistryValueKind.String);
+            }
+
+            // ── REG_BINARY bit-mask (BinaryByteIndex + BitMask) ──
+            if (setting.BitMask.HasValue && setting.BinaryByteIndex.HasValue)
+            {
+                if (!CreateKey(setting.KeyPath)) return false;
+                var setBit = specificValue switch
+                {
+                    bool b => b,
+                    int   i => i != 0,
+                    byte  b => b != 0,
+                    _        => isEnabled
+                };
+                return ModifyBinaryBit(setting.KeyPath, setting.ValueName!,
+                    setting.BinaryByteIndex.Value, setting.BitMask.Value, setBit);
+            }
+
+            // ── REG_BINARY byte-only modify ──
+            if (setting.ModifyByteOnly && setting.BinaryByteIndex.HasValue)
+            {
+                var byteValue = specificValue switch
+                {
+                    byte b => b,
+                    int   i => (byte)i,
+                    _ when isEnabled => GetWriteValue(setting.EnabledValue) switch
+                    {
+                        byte b => b,
+                        int  i => (byte)i,
+                        _      => (byte)0
+                    },
+                    _ => GetWriteValue(setting.DisabledValue) switch
+                    {
+                        byte b => b,
+                        int  i => (byte)i,
+                        _      => (byte)0
+                    }
+                };
+                if (!CreateKey(setting.KeyPath)) return false;
+                return ModifyBinaryByte(setting.KeyPath, setting.ValueName!,
+                    setting.BinaryByteIndex.Value, byteValue);
+            }
+
+            // ── Standard value write / delete ──
+            var valueToSet = useDefaultValue
+                ? GetWriteValue(setting.DisabledValue)
+                : specificValue ?? (isEnabled
+                    ? GetWriteValue(setting.EnabledValue)
+                    : GetWriteValue(setting.DisabledValue));
+
+            if (valueToSet == null)
+                return DeleteValue(setting.KeyPath, setting.ValueName);
+
+            if (!CreateKey(setting.KeyPath)) return false;
+            return WriteValue(setting.KeyPath, setting.ValueName, valueToSet, setting.ValueType);
         }
-        return written;
+        catch (Exception ex)
+        {
+            Log($"[REGISTRY] Error applying '{setting.KeyPath}\\{setting.ValueName}': {ex.Message}");
+            return false;
+        }
     }
+
+    private static object? GetWriteValue(object?[]? values) => values?.FirstOrDefault(v => v != null);
+
+    private bool ValueExists(string keyPath, string? valueName) =>
+        ReadValue(keyPath, valueName) is not null;
+
+    private static void Log(string message) => AppLog.Write(message);
 
     // ── Helpers ──────────────────────────────────────────────────────────────
 
