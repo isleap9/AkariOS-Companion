@@ -26,4 +26,10 @@ public sealed record SettingStateResult
 
     /// <summary>True when the live value is not offered by any option.</summary>
     public bool IsCustomState { get; init; }
+
+    /// <summary>
+    /// Non-null when the setting's backing target does not exist on this machine
+    /// (task absent, service key absent). Shown as a visual "not available" note.
+    /// </summary>
+    public string? UnavailableReason { get; init; }
 }

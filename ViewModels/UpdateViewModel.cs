@@ -27,6 +27,7 @@ public partial class UpdateSettingItem : ObservableObject
     public string Name => _definition.Name;
     public string Description => _definition.Description;
     public bool IsSelection => _definition.InputType == InputType.Selection;
+    public string? Warning => BuildWarnings.For(Id);
     public IReadOnlyList<ComboBoxOption> Options =>
         _definition.ComboBox?.Options ?? (IReadOnlyList<ComboBoxOption>)Array.Empty<ComboBoxOption>();
 
@@ -89,7 +90,8 @@ public partial class UpdateSettingItem : ObservableObject
         _isOn = state.IsEnabled;
         _selectedIndex = state.CurrentIndex;
 
-        if (state.IsCustomState) Status = "Custom";
+        if (state.UnavailableReason is not null) Status = state.UnavailableReason;
+        else if (state.IsCustomState) Status = "Custom";
         else if (Status is not ("Applied" or "Applied - restart required")) Status = null;
         OnPropertyChanged(nameof(IsOn));
         OnPropertyChanged(nameof(SelectedIndex));

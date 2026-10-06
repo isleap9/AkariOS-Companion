@@ -56,6 +56,10 @@
                                                         <TextBlock Text="{Binding Description}" FontSize="12"
                                                                    Style="{StaticResource Caption}"
                                                                    Margin="0,2,0,0" TextWrapping="Wrap" />
+                                                        <TextBlock Text="{Binding Warning}" FontSize="11"
+                                                                   Foreground="{StaticResource AkariWarn}"
+                                                                   Margin="0,3,0,0" TextWrapping="Wrap"
+                                                                   Visibility="{Binding Warning, Converter={StaticResource NullToVis}}" />
                                                         <TextBlock Text="{Binding Status}" FontSize="11"
                                                                    Foreground="{StaticResource AkariFaint}"
                                                                    Margin="0,3,0,0" TextWrapping="Wrap"

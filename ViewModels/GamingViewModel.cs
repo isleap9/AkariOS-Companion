@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -24,6 +25,7 @@ public partial class GamingSettingItem : ObservableObject
     public string Name => _definition.Name;
     public string Description => _definition.Description;
     public bool IsSelection => _definition.InputType == InputType.Selection;
+    public string? Warning => BuildWarnings.For(Id);
     public IReadOnlyList<ComboBoxOption> Options =>
         _definition.ComboBox?.Options ?? (IReadOnlyList<ComboBoxOption>)System.Array.Empty<ComboBoxOption>();
 
@@ -37,6 +39,15 @@ public partial class GamingSettingItem : ObservableObject
         _executor = executor;
         _log = log;
     }
+
+    /// <summary>
+    /// All setting definitions on this page, for preset cascades
+    /// (e.g. Visual Effects Mode applying its preset to every child toggle).
+    /// </summary>
+    public IReadOnlyList<SettingDefinition>? PeerDefinitions { get; set; }
+
+    /// <summary>Re-reads every row after a preset cascade lands.</summary>
+    public Action? RefreshPeers { get; set; }
 
     public bool IsOn
     {
@@ -71,8 +82,9 @@ public partial class GamingSettingItem : ObservableObject
         _selectedIndex = state.CurrentIndex;
 
         // Preserve an outstanding restart notice; only replace the label when the
-        // read found a genuinely custom value.
-        if (state.IsCustomState) Status = "Custom";
+        // read found a genuinely custom value — or the target is gone entirely.
+        if (state.UnavailableReason is not null) Status = state.UnavailableReason;
+        else if (state.IsCustomState) Status = "Custom";
         else if (Status is not ("Applied" or "Applied - restart required")) Status = null;
         OnPropertyChanged(nameof(IsOn));
         OnPropertyChanged(nameof(SelectedIndex));
@@ -115,6 +127,44 @@ public partial class GamingSettingItem : ObservableObject
         var result = _executor.ApplySelection(_definition, index);
         Report(result.Success, result, $"\"{label}\"", expectRestart);
         Refresh();
+        ApplyPresets(index);
+    }
+
+    /// <summary>
+    /// Parent preset cascade, ported from Akari-Tool's SettingDependencyResolver:
+    /// after the parent's own value lands, every child in
+    /// SettingPresets[index] is toggled to its preset state, then all rows
+    /// re-read so the switches visibly move.
+    /// </summary>
+    private void ApplyPresets(int index)
+    {
+        if (_definition.SettingPresets is null
+            || _definition.InputType != InputType.Selection
+            || PeerDefinitions is null)
+            return;
+
+        if (!_definition.SettingPresets.TryGetValue(index, out var preset))
+            return;
+
+        _log($"[PRESET] {_definition.Name}: applying preset to {preset.Count} setting(s)");
+        foreach (var (childId, childValue) in preset)
+        {
+            var child = PeerDefinitions.FirstOrDefault(s => s.Id == childId);
+            if (child is null) continue;
+
+            try
+            {
+                var childResult = _executor.ApplyToggle(child, childValue);
+                _log(childResult.Success
+                    ? $"[PRESET] {child.Name} -> {(childValue ? "ON" : "OFF")}"
+                    : $"[PRESET] {child.Name} FAILED: {childResult.ErrorMessage}");
+            }
+            catch (Exception ex)
+            {
+                _log($"[PRESET] {childId} FAILED: {ex.Message}");
+            }
+        }
+        RefreshPeers?.Invoke();
     }
 
     /// <summary>
@@ -185,9 +235,21 @@ public partial class GamingViewModel : ObservableObject
         _executor = executor;
         _log = log;
 
-        foreach (var group in GamingCatalog.Build())
+        var groups = GamingCatalog.Build();
+        foreach (var group in groups)
             Sections.Add(new GamingSection(group.Name,
                 group.Settings.Select(s => new GamingSettingItem(s, reader, executor, log)).ToList()));
+
+        // Preset cascades need every definition + a way to repaint all rows.
+        var definitions = groups.SelectMany(g => g.Settings).ToList();
+        foreach (var item in AllSettings)
+        {
+            item.PeerDefinitions = definitions;
+            item.RefreshPeers = () =>
+            {
+                foreach (var peer in AllSettings) peer.Refresh();
+            };
+        }
     }
 
     /// <summary>

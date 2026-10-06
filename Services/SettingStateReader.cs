@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Text;
 using AkariOSCompanion.Models;
 using Microsoft.Win32;
 
@@ -35,6 +36,13 @@ public sealed class SettingStateReader : ISettingStateReader
 
     public bool ReadToggleState(SettingDefinition setting)
     {
+        // Script-only System Protection toggle: state lives in SPP\Clients matched
+        // against the C: volume GUID (plus the DisableSR policy override), not in a
+        // plain value. Ported from Akari-Tool's SystemRestoreService.IsEnabledForC,
+        // minus WMI: the C: GUID comes from HKLM\SYSTEM\MountedDevices instead.
+        if (setting.Id == "system-restore-protection")
+            return IsSystemProtectionEnabled();
+
         var rs = PrimaryRegistrySetting(setting);
         if (rs == null)
         {
@@ -185,12 +193,90 @@ public sealed class SettingStateReader : ISettingStateReader
                 IsCustomState = isSelection && ReadSelectionIndex(setting) == -1,
                 Success = true,
                 RawValues = raw,
+                UnavailableReason = DetectUnavailable(setting),
             };
         }
         catch (Exception ex)
         {
             return new SettingStateResult { Success = false, ErrorMessage = ex.Message };
         }
+    }
+
+    // ── Availability ─────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// System Protection state for C:, mirroring Akari-Tool's SystemRestoreService:
+    /// DisableSR policy forces off; otherwise the C: volume GUID (from
+    /// MountedDevices) must appear in SPP\Clients\{SR-GUID} (REG_MULTI_SZ).
+    /// </summary>
+    private bool IsSystemProtectionEnabled()
+    {
+        const string SrGuid = "{09F7EDC5-294E-4180-AF6A-FB0E6A0E9513}";
+
+        try
+        {
+            if (_registry.ReadValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\SystemRestore",
+                    "DisableSR") is int p && p == 1)
+                return false;
+
+            var dosDevices = _registry.ReadValue(
+                @"HKEY_LOCAL_MACHINE\SYSTEM\MountedDevices", @"\DosDevices\C:") as byte[];
+            if (dosDevices is null) return false;
+            var cGuid = ExtractVolumeGuid(dosDevices);
+            if (cGuid is null) return false;
+
+            if (_registry.ReadValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SPP\Clients",
+                    SrGuid) is not string[] entries)
+                return false;
+
+            return entries.Any(e =>
+                !string.IsNullOrEmpty(e) &&
+                e.IndexOf(cGuid, StringComparison.OrdinalIgnoreCase) >= 0);
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// C: volume GUID in canonical "{...}" form from MountedDevices data.
+    /// Basic disks store UTF-16 "\??\Volume{GUID}"; dynamic disks store ASCII
+    /// "DMIO:ID:" followed by the 16-byte mixed-endian GUID.
+    /// </summary>
+    private static string? ExtractVolumeGuid(byte[] data)
+    {
+        var text = Encoding.Unicode.GetString(data).TrimEnd('\0');
+        var start = text.IndexOf('{');
+        var end = text.IndexOf('}');
+        if (start >= 0 && end > start) return text.Substring(start, end - start + 1);
+
+        const string DmioPrefix = "DMIO:ID:";
+        if (data.Length >= 24 && Encoding.ASCII.GetString(data, 0, 8) == DmioPrefix)
+        {
+            var guidBytes = new byte[16];
+            Buffer.BlockCopy(data, 8, guidBytes, 0, 16);
+            return "{" + new Guid(guidBytes).ToString("D") + "}";
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// The backing task itself is gone (removed in 26H2, app not installed).
+    /// Registry keys are NOT checked here: absent policy keys are normal
+    /// (Windows default), not missing features.
+    /// </summary>
+    private string? DetectUnavailable(SettingDefinition setting)
+    {
+        const string reason = "Not available on this Windows build";
+
+        if (setting.RegistrySettings.Count == 0 && setting.ScheduledTaskSettings.Count > 0)
+            return _tasks.TaskExists(setting.ScheduledTaskSettings[0].TaskPath) ? null : reason;
+
+        return null;
     }
 
     // ── Option matching ──────────────────────────────────────────────────────

@@ -67,8 +67,9 @@ public sealed class SettingOperationExecutor : ISettingOperationExecutor
 
     public OperationResult ApplyToggle(SettingDefinition setting, bool enabled)
     {
-        if (setting.RegistrySettings.Count == 0 && setting.ScheduledTaskSettings.Count == 0)
-            return OperationResult.Fail($"{setting.Name} has no registry or task backing.");
+        if (setting.RegistrySettings.Count == 0 && setting.ScheduledTaskSettings.Count == 0
+            && setting.PowerShellScripts.Count == 0)
+            return OperationResult.Fail($"{setting.Name} has no registry, task or script backing.");
 
         var failures = new List<string>();
         var appliedWrites = new List<string>();
@@ -105,6 +106,14 @@ public sealed class SettingOperationExecutor : ISettingOperationExecutor
                 : (enabled ? task.RecommendedState : task.DefaultState);
             if (want is null) continue;
 
+            // Absent on this machine (removed in 26H2, Office not installed, …):
+            // skip honestly instead of logging a phantom success or a failure.
+            if (!_tasks.TaskExists(task.TaskPath))
+            {
+                _log?.Invoke($"[SKIP] Task not present on this machine: {task.TaskPath}");
+                continue;
+            }
+
             if (_tasks.SetTaskEnabled(task.TaskPath, want.Value, out var err))
             {
                 applied++;
@@ -118,9 +127,51 @@ public sealed class SettingOperationExecutor : ISettingOperationExecutor
             }
         }
 
+        RunScripts(setting, option: null, useEnabled: enabled,
+                   appliedWrites, failures, ref applied);
+
         var result = Build(failures, applied, setting, appliedWrites);
         LogOutcome(setting, enabled, result);
         return result;
+    }
+
+    /// <summary>
+    /// Runs a setting's PowerShell scripts, ported from Akari-Tool's executor:
+    /// per-option <see cref="ScriptOption"/> picks Enabled/Disabled/None, then the
+    /// selected option's <c>ScriptVariables</c> are substituted into
+    /// <c>{{placeholders}}</c>. Unsubstituted placeholders are left intact —
+    /// the DoH sweep script self-guards on them.
+    /// </summary>
+    private void RunScripts(SettingDefinition setting, ComboBoxOption? option, bool useEnabled,
+                            List<string> appliedWrites, List<string> failures, ref int applied)
+    {
+        foreach (var scriptSetting in setting.PowerShellScripts)
+        {
+            if (option?.Script is { } scriptOption)
+            {
+                if (scriptOption == ScriptOption.None) continue;
+                useEnabled = scriptOption == ScriptOption.Enabled;
+            }
+
+            var script = useEnabled ? scriptSetting.EnabledScript : scriptSetting.DisabledScript;
+
+            if (!string.IsNullOrEmpty(script) && option?.ScriptVariables is { } variables)
+                foreach (var kvp in variables)
+                    script = script.Replace("{{" + kvp.Key + "}}", kvp.Value);
+
+            if (string.IsNullOrEmpty(script)) continue;
+
+            _log?.Invoke($"[SCRIPT] {setting.Name}: \"{option?.DisplayName ?? (useEnabled ? "ON" : "OFF")}\"");
+            if (PowerShellScriptRunner.Run(script, _log))
+            {
+                applied++;
+                appliedWrites.Add($"script: {setting.Name} \"{option?.DisplayName ?? (useEnabled ? "ON" : "OFF")}\"");
+            }
+            else
+            {
+                failures.Add($"Script: {setting.Name}");
+            }
+        }
     }
 
     private void LogOutcome(SettingDefinition setting, bool enabled, OperationResult result,
@@ -157,14 +208,16 @@ public sealed class SettingOperationExecutor : ISettingOperationExecutor
         var option = options[optionIndex];
         var rs = setting.RegistrySettings.FirstOrDefault(r => r.IsPrimary)
                  ?? setting.RegistrySettings.FirstOrDefault();
-        if (rs is null)
+        // Script-driven dropdowns (e.g. DNS) have no registry backing — the
+        // PowerShell scripts below are their entire apply path.
+        if (rs is null && setting.PowerShellScripts.Count == 0)
             return OperationResult.Fail($"{setting.Name} has no registry backing.");
 
         var failures = new List<string>();
         var appliedWrites = new List<string>();
         var applied = 0;
 
-        if (option.ValueMappings is { Count: > 0 })
+        if (rs is not null && option.ValueMappings is { Count: > 0 })
         {
             foreach (var (valueName, value) in option.ValueMappings)
             {
@@ -198,7 +251,7 @@ public sealed class SettingOperationExecutor : ISettingOperationExecutor
                 }
             }
         }
-        else if (option.SimpleValue is not null)
+        else if (rs is not null && option.SimpleValue is not null)
         {
             if (_registry.ApplySetting(rs, enable: true, specificValue: option.SimpleValue))
             {
@@ -207,6 +260,8 @@ public sealed class SettingOperationExecutor : ISettingOperationExecutor
             }
             else failures.Add($"{rs.KeyPath}\\{rs.ValueName}");
         }
+        RunScripts(setting, option, useEnabled: true,
+                   appliedWrites, failures, ref applied);
         var result = Build(failures, applied, setting, appliedWrites);
         if (result.Failures.Count == 0)
             _log?.Invoke($"[OK] {setting.Name}: option \"{option.DisplayName}\" applied ({applied} value(s)");

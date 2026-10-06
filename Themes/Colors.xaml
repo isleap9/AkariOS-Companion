@@ -30,6 +30,7 @@
     <!-- Status -->
     <SolidColorBrush x:Key="AkariFree"   Color="#FF5FD47A" />
     <SolidColorBrush x:Key="AkariOnline" Color="#FF5FD47A" />
+    <SolidColorBrush x:Key="AkariWarn"   Color="#FFE0A23A" />
 
     <!-- Download category accents -->
     <SolidColorBrush x:Key="CatBrowsers"  Color="#FF8A8A8A" />
