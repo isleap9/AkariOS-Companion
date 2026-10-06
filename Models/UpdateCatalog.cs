@@ -108,7 +108,7 @@ public static class UpdateCatalog
                             {
                                 DisplayName = "Disabled",
                                 IsRecommended = true,
-                                ValueMappings = new Dictionary<string, object?> { ["DODownloadMode"] = 99 },
+                                ValueMappings = new Dictionary<string, object?> { ["DODownloadMode"] = 0 },
                             },
                         ],
                     },

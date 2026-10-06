@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Win32;
@@ -171,18 +172,20 @@ public sealed class WindowsUpdatePolicyHandler
         _registry.WriteValue(AuHklm, "UseWUServer", 0, RegistryValueKind.DWord);
         _registry.WriteValue(AuHkcu, "UseWUServer", 0, RegistryValueKind.DWord);
 
-        // Pause window: 2025-01-01 through 2051-12-31 (effectively "indefinite").
-        // Ported 1:1 from Akari-Tool reference — all 8 UX string values.
+        // Pause window: TODAY through TODAY+365d, matching AkariOS-Ultimate
+        // `3 Setup\12 Updates Pause.ps1` (UTC yyyy-MM-ddTHH:mm:ssZ).
+        var start = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
+        var end = DateTime.UtcNow.AddDays(365).ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
         var stringPairs = new (string Name, string Value)[]
         {
-            ("PauseFeatureUpdatesStartTime", "2025-01-01T00:00:00Z"),
-            ("PauseFeatureUpdatesEndTime",   "2051-12-31T00:00:00Z"),
-            ("PauseQualityUpdatesStartTime", "2025-01-01T00:00:00Z"),
-            ("PauseQualityUpdatesEndTime",   "2051-12-31T00:00:00Z"),
-            ("PauseUpdatesStartTime",        "2025-01-01T00:00:00Z"),
-            ("PauseUpdatesExpiryTime",       "2051-12-31T00:00:00Z"),
-            ("PausedQualityDate",            "2025-01-01T00:00:00Z"),
-            ("PausedFeatureDate",            "2025-01-01T00:00:00Z"),
+            ("PauseFeatureUpdatesStartTime", start),
+            ("PauseFeatureUpdatesEndTime",   end),
+            ("PauseQualityUpdatesStartTime", start),
+            ("PauseQualityUpdatesEndTime",   end),
+            ("PauseUpdatesStartTime",        start),
+            ("PauseUpdatesExpiryTime",       end),
+            ("PausedQualityDate",            start),
+            ("PausedFeatureDate",            start),
         };
         foreach (var (name, value) in stringPairs)
             _registry.WriteValue(UxHklm, name, value, RegistryValueKind.String);

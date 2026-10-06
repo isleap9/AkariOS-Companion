@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AkariOSCompanion")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("2.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("2.0.0+c07bd5792ccf4025c2e1a7bf89c16bd2e5503d82")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("2.0.0+f0666f9dd31cb28bd99c623893da72b4cbb11a9a")]
 [assembly: System.Reflection.AssemblyProductAttribute("AkariOSCompanion")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AkariOSCompanion")]
 [assembly: System.Reflection.AssemblyVersionAttribute("2.0.0.0")]

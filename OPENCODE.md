@@ -54,6 +54,7 @@ Build state: `dotnet build` clean, 0 warnings, 0 errors.
 ## Quick resume commands
 
 ```powershell
-cd C:\Users\isleap\Documents\AkariOS-Companion
-dotnet build
+cd C:\Users\isleap\Documents\GitHub\AkariOS-Companion
+dotnet build -c Release
 ```
+Test folder (only one from now on): `bin\Release\net8.0-windows\` — copy all of it to the VM.

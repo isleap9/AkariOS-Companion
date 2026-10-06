@@ -56,7 +56,7 @@ namespace AkariOSCompanion.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/AkariOSCompanion;component/views/akariostweakspage.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/AkariOSCompanion;V2.0.0.0;component/views/akariostweakspage.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Views\AkariOSTweaksPage.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
