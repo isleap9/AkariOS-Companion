@@ -73,16 +73,20 @@ public sealed class SettingStateReader : ISettingStateReader
     /// <summary>Reads one registry setting's on/off state, in isolation.</summary>
     private bool ReadSingleToggle(RegistrySetting rs, SettingDefinition setting)
     {
-        if (!_registry.TryOpenSubKey(rs.KeyPath, out var key) || key is null)
-            return false;
+        // A missing key is treated exactly like a missing value: "not configured",
+        // i.e. Windows is running its own default. Returning false here made
+        // delete-to-enable rows (feedback prompts, push notifications, store
+        // auto-downloads) permanently stuck — ON deleted nothing and OFF never
+        // fired because the row always read OFF.
+        _registry.TryOpenSubKey(rs.KeyPath, out var key);
 
         using (key)
         {
             // Key-existence toggles are on when the key itself is present.
             if (rs.ValueName == null)
-                return true;
+                return key is not null;
 
-            var current = key.GetValue(rs.ValueName);
+            var current = key?.GetValue(rs.ValueName);
 
             // Value absent. The null sentinel inside EnabledValue means "absent
             // counts as on", but only when the catalog author opted into it for

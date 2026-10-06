@@ -46,7 +46,7 @@ Build state: `dotnet build` clean, 0 warnings, 0 errors.
 
 ## What's left to build
 
-- **Privacy page** — placeholder (`Views/PrivacyPage.xaml.cs:8`). Port catalog + ViewModel (same pattern as Update).
+- **Privacy page** — DONE (same pattern as Notifications: `Models/PrivacyCatalog.cs` 1:1 port incl. UAC/SmartAppControl/PS-policy dropdowns, `ViewModels/PrivacyViewModel.cs`, data-driven `Views/PrivacyPage.xaml`). VM-verify each group.
 - **Notifications page** — DONE (same pattern as Update: `Models/NotificationsCatalog.cs` 1:1 port, `ViewModels/NotificationsViewModel.cs`, data-driven `Views/NotificationsPage.xaml`). VM-verify each toggle.
 - `ApplyDefault` path (`SettingDefinitionToggleState` vs old `GetParentDisableValue`) — both read `DisabledValue` so they agree, but unverified on a machine.
 - Icons: dropped `Icon`/`IconPack` from `UpdateCatalog` (Gaming rows don't bind icons either). Add back if wanted.
