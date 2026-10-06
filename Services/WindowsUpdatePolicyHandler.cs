@@ -47,19 +47,29 @@ public sealed class WindowsUpdatePolicyHandler
             var dllPath = SystemDll(dll);
             var backupPath = SystemDll(BackupName(dll));
             if (File.Exists(backupPath) && !File.Exists(dllPath))
+            {
+                _log($"[UPDATE] Detect: {dll} renamed -> Disabled (3)");
                 return 3;
+            }
         }
 
         // Probe 2: pause timestamps present (Paused mode).
         foreach (var name in PauseValueNames)
         {
-            if (_registry.ReadValue(UxHklm, name) != null)
+            var v = _registry.ReadValue(UxHklm, name);
+            if (v != null)
+            {
+                _log($"[UPDATE] Detect: {name} present ({v}) -> Paused (2)");
                 return 2;
+            }
         }
 
         // Probe 3: feature updates deferred (Security Only mode).
         if (_registry.ReadValue(UxHklm, "DeferFeatureUpdates") is int d && d == 1)
+        {
+            _log("[UPDATE] Detect: DeferFeatureUpdates=1 -> Security Only (1)");
             return 1;
+        }
 
         // Probe 4: Normal.
         return 0;
@@ -111,14 +121,23 @@ public sealed class WindowsUpdatePolicyHandler
 
     private void ApplyNormalRegistry()
     {
+        _log("[UPDATE] Normal: clearing AU + UX values...");
         foreach (var name in AuValueNames)
         {
-            _registry.DeleteValue(AuHklm, name);
-            _registry.DeleteValue(AuHkcu, name);
+            var a = _registry.DeleteValue(AuHklm, name);
+            var b = _registry.DeleteValue(AuHkcu, name);
+            if (!a || !b) _log($"       delete AU {name}: hklm={a} hkcu={b}");
         }
 
+        // Must match Akari-Tool reference uxValues 1:1 — GetCurrentPolicyIndex
+        // probes PauseUpdatesStartTime etc for Paused mode, so omitting them
+        // here made Normal read straight back as Paused.
         foreach (var name in UxValueNames)
-            _registry.DeleteValue(UxHklm, name);
+        {
+            var ok = _registry.DeleteValue(UxHklm, name);
+            var stillThere = _registry.ReadValue(UxHklm, name) != null;
+            _log($"       delete UX {name}: ok={ok} gone={(!stillThere)}");
+        }
     }
 
     private void ApplySecurityOnlyRegistry()
@@ -153,17 +172,20 @@ public sealed class WindowsUpdatePolicyHandler
         _registry.WriteValue(AuHkcu, "UseWUServer", 0, RegistryValueKind.DWord);
 
         // Pause window: 2025-01-01 through 2051-12-31 (effectively "indefinite").
-        var start = "2025-01-01T00:00:00Z";
-        var end = "2051-12-31T00:00:00Z";
-        foreach (var name in PauseValueNames)
-            _registry.WriteValue(UxHklm, name, start, RegistryValueKind.String);
-
-        foreach (var name in new[]
-                 {
-                     "PauseFeatureUpdatesEndTime", "PauseQualityUpdatesEndTime",
-                     "PauseUpdatesExpiryTime",
-                 })
-            _registry.WriteValue(UxHklm, name, end, RegistryValueKind.String);
+        // Ported 1:1 from Akari-Tool reference — all 8 UX string values.
+        var stringPairs = new (string Name, string Value)[]
+        {
+            ("PauseFeatureUpdatesStartTime", "2025-01-01T00:00:00Z"),
+            ("PauseFeatureUpdatesEndTime",   "2051-12-31T00:00:00Z"),
+            ("PauseQualityUpdatesStartTime", "2025-01-01T00:00:00Z"),
+            ("PauseQualityUpdatesEndTime",   "2051-12-31T00:00:00Z"),
+            ("PauseUpdatesStartTime",        "2025-01-01T00:00:00Z"),
+            ("PauseUpdatesExpiryTime",       "2051-12-31T00:00:00Z"),
+            ("PausedQualityDate",            "2025-01-01T00:00:00Z"),
+            ("PausedFeatureDate",            "2025-01-01T00:00:00Z"),
+        };
+        foreach (var (name, value) in stringPairs)
+            _registry.WriteValue(UxHklm, name, value, RegistryValueKind.String);
 
         _registry.WriteValue(UxHklm, "FlightSettingsMaxPauseDays", 10023, RegistryValueKind.DWord);
         _registry.WriteValue(UxHklm, "PausedFeatureStatus", 1, RegistryValueKind.DWord);
@@ -399,7 +421,9 @@ public sealed class WindowsUpdatePolicyHandler
         "DeferQualityUpdates", "DeferQualityUpdatesPeriodInDays",
         "PauseFeatureUpdatesStartTime", "PauseFeatureUpdatesEndTime",
         "PauseQualityUpdatesStartTime", "PauseQualityUpdatesEndTime",
-        "FlightSettingsMaxPauseDays", "PausedFeatureStatus", "PausedQualityStatus",
+        "PauseUpdatesStartTime", "PauseUpdatesExpiryTime",
+        "PausedQualityDate", "PausedFeatureDate", "FlightSettingsMaxPauseDays",
+        "PausedFeatureStatus", "PausedQualityStatus",
     ];
 
     private static readonly string[] PauseValueNames =

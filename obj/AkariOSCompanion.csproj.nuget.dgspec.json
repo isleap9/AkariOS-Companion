@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\isleap\\Documents\\AkariOS-Companion\\AkariOSCompanion.csproj": {}
+    "C:\\Users\\isleap\\Documents\\GitHub\\AkariOS-Companion\\AkariOSCompanion.csproj": {}
   },
   "projects": {
-    "C:\\Users\\isleap\\Documents\\AkariOS-Companion\\AkariOSCompanion.csproj": {
+    "C:\\Users\\isleap\\Documents\\GitHub\\AkariOS-Companion\\AkariOSCompanion.csproj": {
       "version": "2.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\isleap\\Documents\\AkariOS-Companion\\AkariOSCompanion.csproj",
+        "projectUniqueName": "C:\\Users\\isleap\\Documents\\GitHub\\AkariOS-Companion\\AkariOSCompanion.csproj",
         "projectName": "AkariOSCompanion",
-        "projectPath": "C:\\Users\\isleap\\Documents\\AkariOS-Companion\\AkariOSCompanion.csproj",
+        "projectPath": "C:\\Users\\isleap\\Documents\\GitHub\\AkariOS-Companion\\AkariOSCompanion.csproj",
         "packagesPath": "C:\\Users\\isleap\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\isleap\\Documents\\AkariOS-Companion\\obj\\",
+        "outputPath": "C:\\Users\\isleap\\Documents\\GitHub\\AkariOS-Companion\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\isleap\\AppData\\Roaming\\NuGet\\NuGet.Config"

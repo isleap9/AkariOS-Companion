@@ -114,11 +114,11 @@
   "project": {
     "version": "2.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\isleap\\Documents\\AkariOS-Companion\\AkariOSCompanion_ypxafem2_wpftmp.csproj",
+      "projectUniqueName": "C:\\Users\\isleap\\Documents\\GitHub\\AkariOS-Companion\\AkariOSCompanion.csproj",
       "projectName": "AkariOSCompanion",
-      "projectPath": "c:\\Users\\isleap\\Documents\\AkariOS-Companion\\AkariOSCompanion_ypxafem2_wpftmp.csproj",
+      "projectPath": "C:\\Users\\isleap\\Documents\\GitHub\\AkariOS-Companion\\AkariOSCompanion.csproj",
       "packagesPath": "C:\\Users\\isleap\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\isleap\\Documents\\AkariOS-Companion\\obj\\",
+      "outputPath": "C:\\Users\\isleap\\Documents\\GitHub\\AkariOS-Companion\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\isleap\\AppData\\Roaming\\NuGet\\NuGet.Config"

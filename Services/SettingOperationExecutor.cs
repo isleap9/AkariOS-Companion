@@ -87,7 +87,7 @@ public sealed class SettingOperationExecutor : ISettingOperationExecutor
             if (_registry.ApplySetting(rs, enabled))
             {
                 applied++;
-                appliedWrites.Add(Describe(rs, enabled, null));
+                appliedWrites.Add(Describe(rs, enabled, ResolveWriteValue(rs, enabled)));
             }
             else
             {
@@ -228,13 +228,30 @@ public sealed class SettingOperationExecutor : ISettingOperationExecutor
 
         var where = $"{rs.KeyPath}\\{rs.ValueName}";
         if (rs.CompositeStringKey is not null)
-            return $"{where} [{rs.CompositeStringKey}] = {value ?? "(removed)"}";
+            return $"{where} [{rs.CompositeStringKey}] = {FormatValue(value)}";
         if (rs.BitMask.HasValue && rs.BinaryByteIndex.HasValue)
             return $"{where} bit[{rs.BinaryByteIndex}] {(enabled ? "set" : "clear")}";
         if (rs.ApplyPerNetworkInterface || rs.ApplyPerMonitor)
-            return $"{where} = {value ?? "(value removed)"} (per-location expansion)";
-        return $"{where} = {value ?? "(value removed)"}";
+            return $"{where} = {FormatValue(value)} (per-location expansion)";
+        return $"{where} = {FormatValue(value)}";
     }
+
+    /// <summary>
+    /// Mirrors WindowsRegistryService.GetWriteValue: first non-null entry wins,
+    /// null (or empty) means "delete this value". Must stay in sync with
+    /// ApplySettingCore's standard-value path or the log lies about what was written.
+    /// </summary>
+    private static object? ResolveWriteValue(RegistrySetting rs, bool enabled)
+    {
+        var values = enabled ? rs.EnabledValue : rs.DisabledValue;
+        if (values is null) return null;
+        foreach (var v in values)
+            if (v is not null) return v;
+        return null;
+    }
+
+    private static string FormatValue(object? value) =>
+        value is null ? "(value removed)" : value.ToString() ?? "(null)";
 
     private static int IndexOfRecommended(SettingDefinition setting)
     {
