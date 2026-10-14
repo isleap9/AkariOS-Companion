@@ -562,29 +562,6 @@ public static class GamingCatalog
                         },
                     ],
                 },
-                new SettingDefinition
-                {
-                    Id = "gaming-mmcss-background-only",
-                    Name = "Disable Background-Only for Gaming",
-                    Description = "Mark the Games MMCSS task as foreground so game threads are not treated as background work and deprioritised by the scheduler",
-                    RecommendedToggleState = true,
-                    DefaultToggleState = false,
-                    RegistrySettings =
-                    [
-                        // Inverted: toggle ON = "False" (foreground)
-                        new RegistrySetting
-                        {
-                            KeyPath = @"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                            ValueName = "Background Only",
-                            RecommendedValue = "False",
-                            DefaultValue = "True",
-                            EnabledValue = new object?[] { "False" },
-                            DisabledValue = new object?[] { "True" },
-                            ValueType = RegistryValueKind.String,
-                            IsPrimary = true,
-                        },
-                    ],
-                },
                 ],
         },
     ];
@@ -884,61 +861,7 @@ public static class GamingCatalog
             FeatureId = "gaming-storage",
             Settings =
             [
-                new SettingDefinition
-                {
-                    Id = "storage-nvme-tweaks",
-                    Name = "NVMe Latency Tweaks",
-                    Description = "Disable NVMe idle power states and diagnostic logging to reduce SSD access latency. Recommended for desktops on AC power; may increase idle power draw on laptops.",
-                    RequiresRestart = true,
-                    RecommendedToggleState = true,
-                    DefaultToggleState = false,
-                    RegistrySettings =
-                    [
-                        // Enable = write values; Disable = delete all four (delete-on-disable)
-                        new RegistrySetting
-                        {
-                            KeyPath = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\stornvme\Parameters\Device",
-                            ValueName = "ContiguousMemoryFromAnyNode",
-                            RecommendedValue = 1,
-                            DefaultValue = null,
-                            EnabledValue = new object?[] { 1 },
-                            DisabledValue = new object?[] { null },
-                            ValueType = RegistryValueKind.DWord,
-                            IsPrimary = true,
-                        },
-                        new RegistrySetting
-                        {
-                            KeyPath = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\stornvme\Parameters\Device",
-                            ValueName = "LogSize",
-                            RecommendedValue = 0,
-                            DefaultValue = null,
-                            EnabledValue = new object?[] { 0 },
-                            DisabledValue = new object?[] { null },
-                            ValueType = RegistryValueKind.DWord,
-                        },
-                        new RegistrySetting
-                        {
-                            KeyPath = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\stornvme\Parameters\Device",
-                            ValueName = "IdlePowerMode",
-                            RecommendedValue = 0,
-                            DefaultValue = null,
-                            EnabledValue = new object?[] { 0 },
-                            DisabledValue = new object?[] { null },
-                            ValueType = RegistryValueKind.DWord,
-                        },
-                        new RegistrySetting
-                        {
-                            KeyPath = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\stornvme\Parameters\Device",
-                            ValueName = "DiagnosticFlags",
-                            RecommendedValue = 0,
-                            DefaultValue = null,
-                            EnabledValue = new object?[] { 0 },
-                            DisabledValue = new object?[] { null },
-                            ValueType = RegistryValueKind.DWord,
-                        },
-                    ],
-                },
-            ],
+                ],
         },
     ];
 
@@ -2044,30 +1967,6 @@ public static class GamingCatalog
                 },
                 new SettingDefinition
                 {
-                    Id = "gaming-input-app-preload",
-                    Name = "Input App Preload",
-                    Description = "Preload the Windows Input Experience (touch keyboard, emoji panel) at sign-in. Disable alongside the Touch Keyboard service to stop it running in the background",
-                    InputType = InputType.Toggle,
-                    IsSubjectivePreference = true,
-                    RecommendedToggleState = false,
-                    DefaultToggleState = true,
-                    RegistrySettings =
-                    [
-                        new RegistrySetting
-                        {
-                            KeyPath = @"HKEY_CURRENT_USER\Software\Microsoft\input",
-                            ValueName = "IsInputAppPreloadEnabled",
-                            RecommendedValue = null,
-                            DefaultValue = null,
-                            EnabledValue = new object?[] { 1, null },
-                            DisabledValue = new object?[] { 0 },
-                            ValueType = RegistryValueKind.DWord,
-                            IsPrimary = true,
-                        },
-                    ],
-                },
-                new SettingDefinition
-                {
                     Id = "gaming-xbox-auth-manager",
                     Icon = "MicrosoftXbox",
                     Name = "Xbox Live Auth Manager",
@@ -2132,28 +2031,7 @@ public static class GamingCatalog
                         ],
                     },
                 },
-                new SettingDefinition
-                {
-                    Id = "gaming-midi-service",
-                    Name = "Windows MIDI Service",
-                    Description = "Routes MIDI data for connected musical instruments and audio interfaces. Safe to disable if you don't use MIDI hardware; set to Manual to allow it to start on demand",
-                    InputType = InputType.Selection,
-                    IsSubjectivePreference = true,
-                    RegistrySettings =
-                    [
-                        new RegistrySetting { KeyPath = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\midisrv", ValueName = "Start", RecommendedValue = 3, DefaultValue = 3, EnabledValue = null, DisabledValue = null, ValueType = RegistryValueKind.DWord, IsPrimary = true },
-                    ],
-                    ComboBox = new ComboBoxMetadata
-                    {
-                        Options =
-                        [
-                            new ComboBoxOption { DisplayName = "Disabled", ValueMappings = new Dictionary<string, object?> { ["Start"] = 4 } },
-                            new ComboBoxOption { DisplayName = "Manual", IsRecommended = true, IsDefault = true, ValueMappings = new Dictionary<string, object?> { ["Start"] = 3 } },
-                            new ComboBoxOption { DisplayName = "Automatic", ValueMappings = new Dictionary<string, object?> { ["Start"] = 2 } },
-                        ],
-                    },
-                },
-            ],
+                ],
         },
     ];
 
@@ -3193,31 +3071,7 @@ public static class GamingCatalog
                         },
                     ],
                 },
-                new SettingDefinition
-                {
-                    Id = "keyboard-delay",
-                    Name = "Reduce keyboard repeat delay",
-                    Description = "Sets keyboard initial repeat delay to its shortest value (0) for faster key response",
-                    IsSubjectivePreference = true,
-                    RecommendedToggleState = true,
-                    DefaultToggleState = false,
-                    RegistrySettings =
-                    [
-                        // Enabled = KeyboardDelay 0 (shortest); absent reads as disabled
-                        new RegistrySetting
-                        {
-                            KeyPath = @"HKEY_CURRENT_USER\Control Panel\Keyboard",
-                            ValueName = "KeyboardDelay",
-                            RecommendedValue = 0,
-                            DefaultValue = 1,
-                            EnabledValue = new object?[] { 0 },
-                            DisabledValue = new object?[] { 1, null },
-                            ValueType = RegistryValueKind.DWord,
-                            IsPrimary = true,
-                        },
-                    ],
-                },
-            ],
+                ],
         },
     ];
 }

@@ -264,25 +264,6 @@
                              Foreground="{StaticResource AkariTextDim}" />
 
                 <!-- ADMIN pill overlaid on the title-bar row, right of content / left of chrome -->
-                <Border Grid.Row="0"
-                        HorizontalAlignment="Right" VerticalAlignment="Center"
-                        Margin="0,0,148,0"
-                        BorderBrush="#22FFFFFF" BorderThickness="1"
-                        CornerRadius="8" Background="#08FFFFFF"
-                        Padding="10,3" IsHitTestVisible="False">
-                    <StackPanel Orientation="Horizontal">
-                        <Ellipse Width="6" Height="6" VerticalAlignment="Center"
-                                 Fill="{StaticResource AkariOnline}">
-                            <Ellipse.Effect>
-                                <DropShadowEffect Color="#5FD47A" BlurRadius="6"
-                                                  ShadowDepth="0" Opacity="0.9" />
-                            </Ellipse.Effect>
-                        </Ellipse>
-                        <TextBlock Text="ADMIN" Margin="6,0,0,0"
-                                   FontSize="10"
-                                   Foreground="{StaticResource AkariTextDim}" />
-                    </StackPanel>
-                </Border>
 
                 <!-- Status bar -->
                 <Border Grid.Row="2"
